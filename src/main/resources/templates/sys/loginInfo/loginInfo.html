@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>日志管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" href="/resources/layui/css/layui.css" media="all" />
+    <link rel="stylesheet" href="/resources/css/public.css" media="all" />
+</head>
+<body class="childrenBody">
+<!--查询条件开始-->
+<blockquote class="layui-elem-quote">
+    <form class="layui-form" action="" id="loginInfoForm" method="post">
+           <span>登入用户:</span>&nbsp;
+            <div class="layui-inline">
+                <input class="layui-input" name="loginname" id="loginname" placeholder="用户名" autocomplete="off">
+            </div>&nbsp;
+           <span>用户IP:</span>
+            <div class="layui-inline">
+                <input class="layui-input" name="loginip" id="loginip" placeholder="用户IP地址" autocomplete="off">
+            </div>&nbsp;
+             <span>开始时间:</span>
+            <div class="layui-inline">
+                <input class="layui-input" name="startTime" id="startTime" placeholder="开始时间" autocomplete="off">
+            </div>&nbsp;
+            <span>结束时间:</span>
+            <div class="layui-inline">
+                <input class="layui-input" name="endTime" id="endTime" placeholder="结束时间" autocomplete="off">
+            </div>
+        &nbsp;
+        <button type="button" class="layui-btn layui-btn-normal"  lay-submit="" lay-filter="doSearch"><span class="layui-icon layui-icon-search"></span>搜索</button></legend>
+        <button type="reset" class="layui-btn layui-btn-warm" ><span class="layui-icon layui-icon-refresh"></span>重置</button></legend>
+    </form>
+</blockquote>
+<!--查询条件结束-->
+
+<!--数据表格开始-->
+<table class="layui-hide" id="loginInfoTable" lay-filter="loginInfoTable">
+</table>
+
+<!--表格顶部工具栏部分--->
+<div id="loginInfoToolBar" style="display: none;">
+    <button type="button"  lay-event="batchDelete"  class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>批量删除</button>
+</div>
+<!--单行操作工具栏--->
+<div id="loginInfoRowBar" style="display: none;">
+    <button    type="button" lay-event="delete"  class="layui-btn layui-btn-xs layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>删除</button>
+</div>
+
+<!--数据表格结束-->
+<script type="text/javascript" src="/resources/layui/layui.js"></script>
+<script type="text/javascript">
+
+    layui.use(['jquery','form','table','layer','laydate'],function () {
+        var jquery=layui.jquery;
+        var layer=layui.layer;
+        var form=layui.form;
+        var table=layui.table;
+        var laydate=layui.laydate;
+        //初始化时间选择器
+        laydate.render({
+            elem:'#startTime',
+            type:'datetime'
+        });
+        laydate.render({
+            elem:'#endTime',
+            type:'datetime'
+        });
+        //加载数据
+        var tableIns =table.render({
+            elem: '#loginInfoTable'
+            ,url:'/loginInfo/listLoginInfo'
+            ,toolbar: '#loginInfoToolBar' //开启头部工具栏，并为其绑定左侧模板
+            ,title: '用户登入日志数据表'
+            ,height:'full-60'
+            ,page: true
+            ,cols: [ [
+                {type: 'checkbox', fixed: 'left'}
+                ,{field:'id', title:'ID',align:'center',sort:'true'}
+                ,{field:'loginname', title:'登陆名称',align:'center'}
+                ,{field:'loginip', title:'登陆地址',align:'center'}
+                ,{field:'logintime', title:'登陆时间',align:'center',sort:'true'}
+                ,{fixed: 'right', title:'操作', toolbar: '#loginInfoRowBar',align:'center'}
+            ] ]
+        });
+        //模糊查询
+        form.on("submit(doSearch)",function(data){
+            tableIns.reload({
+                where:data.field,
+                page:{
+                    curr:1
+                }
+            });
+            return false;
+        });
+        //监听工具条的事件
+        table.on("toolbar(loginInfoTable)",function(obj){
+            switch(obj.event){
+                case 'batchDelete':
+                    batchDelete();
+                    break;
+            };
+        });
+
+        //监听行工具条的事件
+        table.on("tool(loginInfoTable)",function(obj){
+            var data = obj.data; //获得当前行数据
+            switch(obj.event){
+                case 'delete':
+                    deleteInfo(data);
+                    break;
+            };
+        });
+        //删除单记录
+        function deleteInfo(data){
+            layer.confirm('你确定要删除这条数据吗?', {icon: 3, title:'提示'}, function(index){
+                jquery.post("/loginInfo/delete",{id:data.id},function(res){
+                    if(res.code==200){
+                        tableIns.reload();
+                    }
+                    layer.msg(res.msg);
+                })
+                layer.close(index);
+            });
+        }
+        //批量删除
+        function batchDelete() {
+            //得到选中行
+            var checkStatus = table.checkStatus('loginInfoTable');
+            var dataLength=checkStatus.data.length;
+            if(dataLength>0){
+                layer.confirm('你确定要删除这些数据吗?', {icon: 3, title:'提示'}, function(index){
+                    var data=checkStatus.data; //获取选中行的数据
+                    var ids="";
+                    jquery.each(data,function(index,item){
+                        ids+=item.id+",";
+                    })
+                    ids=ids.substring(0,ids.length-1);
+                    jquery.post("/loginInfo/batchDelete",{"ids":ids},function(res){
+                        if(res.code==200){
+                            tableIns.reload();
+                        }
+                        layer.msg(res.msg);
+                    })
+                    layer.close(index);
+                });
+
+            }else{
+                layer.msg("请选中操作行")
+            }
+        }
+        
+
+
+    });
+</script>
+</body>
+</html>

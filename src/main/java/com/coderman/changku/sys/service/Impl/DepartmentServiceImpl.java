@@ -19,6 +19,11 @@ public class DepartmentServiceImpl implements DepartmentService {
     private DepartmentMapper departmentMapper;
 
     @Override
+    public Department findOneById(Integer id) {
+        return departmentMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
     public List<Department> listAll() {
         return departmentMapper.selectByExample(null);
     }
@@ -58,6 +63,9 @@ public class DepartmentServiceImpl implements DepartmentService {
         DepartmentExample.Criteria criteria = departmentExample.createCriteria();
         DepartmentExample.Criteria criteria2=departmentExample.createCriteria();
         if(departmentVo!=null){
+            if(departmentVo.getTitle()!=null&&!"".equals(departmentVo.getTitle())){
+                criteria.andTitleLike("%"+departmentVo.getTitle()+"%");
+            }
             if(departmentVo.getTitle()!=null&&!"".equals(departmentVo.getTitle())){
                 criteria.andTitleLike("%"+departmentVo.getTitle()+"%");
             }

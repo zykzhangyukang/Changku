@@ -8,6 +8,62 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/sys")
 public class SystemController {
 
+
+
+    /**
+     * 跳转到权限管理页面
+     * @return
+     */
+    @GetMapping("/toPermissionLeft")
+    public String toPermissionLeft(){
+        return "sys/permission/permissionleft";
+    }
+
+
+    /**
+     * 跳转到权限管理页面
+     * @return
+     */
+    @GetMapping("/toPermissionRight")
+    public String toPermissionRight(){
+        return "sys/permission/permissionright";
+    }
+
+    /**
+     * 跳转到权限管理页面
+     * @return
+     */
+    @GetMapping("/toPermissionManager")
+    public String toPermissionManager(){
+        return "sys/permission/permission";
+    }
+
+    /**
+     * 跳转到菜单管理
+     * @return
+     */
+    @GetMapping("/toMenuManager")
+    public String toMenuManager(){
+        return "sys/menu/menu";
+    }
+    /**
+     * 跳转到部门菜单的部分
+     * @return
+     */
+    @GetMapping("/toMenuLeft")
+    public String toMenuLeft(){
+        return "sys/menu/menuleft";
+    }
+
+    /**
+     * 跳转到菜单右边的页面
+     * @return
+     */
+    @GetMapping("/toMenuRight")
+    public String toMenutRight(){
+        return "sys/menu/menuright";
+    }
+    /**
     /**
      * 跳转到部门管理
      * @return

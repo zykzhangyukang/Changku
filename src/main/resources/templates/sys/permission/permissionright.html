@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>部门管理--右边列表</title>
+    <title>权限管理--右边列表</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta http-equiv="Access-Control-Allow-Origin" content="*">
@@ -20,18 +20,14 @@
 <body class="childrenBody">
 <!--查询条件开始-->
 <blockquote class="layui-elem-quote">
-    <form class="layui-form" action="" id="departmentForm" method="post">
-        <span>部门名称:</span>&nbsp;
+    <form class="layui-form" action="" id="permissionForm" method="post">
+        <span>权限名称:</span>&nbsp;
         <div class="layui-inline">
-            <input class="layui-input" name="title" id="title" placeholder="部门名称" autocomplete="off">
+            <input class="layui-input" name="title" id="title" placeholder="权限名称" autocomplete="off">
         </div>&nbsp;
-        <span>地址:</span>
+        <span>URL:</span>
         <div class="layui-inline">
-            <input class="layui-input" name="address" id="address" placeholder="地址" autocomplete="off">
-        </div>&nbsp;
-        <span>备注:</span>
-        <div class="layui-inline">
-            <input class="layui-input" name="remark" id="remark"  placeholder="备注" autocomplete="off">
+            <input class="layui-input" name="href" id="address" placeholder="地址" autocomplete="off">
         </div>&nbsp;
         <button type="button" class="layui-btn layui-btn-normal"  lay-submit="" lay-filter="doSearch"><span class="layui-icon layui-icon-search"></span>搜索</button></legend>
         <button type="reset" class="layui-btn layui-btn-warm" ><span class="layui-icon layui-icon-refresh"></span>重置</button></legend>
@@ -40,16 +36,16 @@
 <!--查询条件结束-->
 
 <!--数据表格开始-->
-<table class="layui-hide" id="departmentTable" lay-filter="departmentTable">
+<table class="layui-hide" id="permissionTable" lay-filter="permissionTable">
 </table>
 <!--数据表格结束-->
 
 <!--表格顶部工具栏部分--->
-<div id="departmentToolBar" style="display: none;">
+<div id="permissionToolBar" style="display: none;">
     <button type="button"  lay-event="add"  class="layui-btn layui-btn-sm layui-btn-warning"><span class="layui-icon layui-icon-add-1"></span>添加</button>
 </div>
 <!--单行操作工具栏--->
-<div id="departmentRowBar" style="display: none;">
+<div id="permissionRowBar" style="display: none;">
     <button    type="button" lay-event="edit"  class="layui-btn   layui-btn-xs"><span class="layui-icon layui-icon-edit"></span>修改</button>
     <button    type="button" lay-event="delete"  class="layui-btn layui-btn-xs layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>删除</button>
 </div>
@@ -58,31 +54,36 @@
 <div style="display: none;padding: 10px" id="addOrUpdateModal">
     <form action="" method="post" class="layui-form layui-form-pane" id="dataFrm" lay-filter="dataFrm">
         <div class="layui-form-item">
-            <label class="layui-form-label">父级部门</label>
+            <label class="layui-form-label">父级权限</label>
             <div class="layui-input-block">
                 <input type="hidden" name="pid" id="pid">
                 <ul id="selectTree" class="dtree" data-id="0" ></ul></div>
-            </div>
+        </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">部门名称</label>
+            <label class="layui-form-label">权限名称</label>
             <div class="layui-input-inline">
                 <input type="hidden" id="key" name="id">
-                <input type="text" name="title" lay-verify="required" placeholder="请输入部门名称" autocomplete="off" class="layui-input">
+                <input type="text" name="title" lay-verify="required" placeholder="请输入权限名称" autocomplete="off" class="layui-input">
             </div>
-            <label class="layui-form-label">部门地址</label>
+            <label class="layui-form-label">URL</label>
             <div class="layui-input-inline">
-                <input type="text" name="address" lay-verify="required" placeholder="请输入部门地址" autocomplete="off" class="layui-input">
+                <input type="text" name="href" placeholder="请输入权限地址" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">权限类型</label>
+            <div class="layui-input-inline">
+                <input type="text" name="type" lay-verify="required" placeholder="请输入权限类型" autocomplete="off" class="layui-input">
+            </div>
+            <label class="layui-form-label">图标icon</label>
+            <div class="layui-input-inline">
+                <input type="text" name="icon" lay-verify="required" placeholder="请输入图标" autocomplete="off" class="layui-input">
             </div>
         </div>
 
-        <div class="layui-form-item layui-form-text">
-            <label class="layui-form-label">部门备注</label>
-            <div class="layui-input-block">
-                <textarea name="remark"  lay-verify="required" placeholder="请输入内容" class="layui-textarea"></textarea>
-            </div>
-        </div>
+
         <div class="layui-form-item" pane="">
-            <label class="layui-form-label">菜单</label>
+            <label class="layui-form-label">权限</label>
             <div class="layui-input-block">
                 <input type="radio" name="open" value="1" title="展开" checked=""><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon"></i><div>男</div></div>
                 <input type="radio" name="open" value="0" title="关闭"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>女</div></div>
@@ -97,8 +98,12 @@
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">排序号</label>
-            <div class="layui-input-block">
+            <div class="layui-input-inline">
                 <input type="text" name="ordernum"　lay-verify="required|number" placeholder="请输入排序号" autocomplete="off" class="layui-input">
+            </div>
+            <label class="layui-form-label">权限Target</label>
+            <div class="layui-input-inline">
+                <input type="text" name="target" placeholder="请输入权限Target" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
@@ -127,32 +132,31 @@
 
 
         //加载数据
-         tableIns=table.render({
-            elem: '#departmentTable'
-            ,url:'/dept/listDepartments'
-            ,toolbar: '#departmentToolBar' //开启头部工具栏，并为其绑定左侧模板
-            ,title: '用户登入日志数据表'
+        tableIns=table.render({
+            elem: '#permissionTable'
+            ,url:'/permission/listPermission'
+            ,toolbar: '#permissionToolBar' //开启头部工具栏，并为其绑定左侧模板
+            ,title: '权限数据表'
             ,height:'full-60'
             ,page: true
             ,cols: [ [
-                ,{field:'id', title:'ID',align:'center',sort:'true',width:"50"}
-                ,{field:'pid', title:'父ID',align:'center',width:"50",sort:'true'}
-                ,{field:'title', title:'部门名',align:'center',width:"150",sort:'true'}
-                ,{field:'address', title:'地址',align:'center',sort:'true',width:"120"}
-                ,{field:'remark', title:'备注',align:'center',width:"150"}
-                ,{field:'ordernum', title:'排序',align:'center',width:"80",sort:'true'}
-                ,{field:'open', title:'菜单',align:'center',sort:'true',width:"100",templet: function (d) {
+                ,{field:'id', title:'ID',align:'center',sort:'true'}
+                ,{field:'pid', title:'父级ID',align:'center',sort:'true'}
+                ,{field:'title', title:'权限名称',align:'center',sort:'true',width:200}
+                ,{field:'type', title:'权限类型',align:'center',sort:'true',width:150}
+                ,{field:'ordernum', title:'排序',align:'center',sort:'true'}
+                ,{field:'open', title:'权限',align:'center',sort:'true',templet: function (d) {
                         return d.open==1?'<font color="#5FB878">展开</font>':'<font color="#FF5722">关闭</font>';
                     }}
-                ,{field:'available', title:'状态',align:'center',sort:'true',width:"80",sort:'true',templet: function (d) {
+                ,{field:'available', title:'状态',align:'center',sort:'true',sort:'true',width:100,templet: function (d) {
                         return d.available==1?'<font color="#5FB878">可用</font>':'<font color="#FF5722">禁用</font>';
                     }}
-                ,{field:'createtime', title:'创建时间',align:'center',sort:'true',width:"150"}
-                ,{fixed: 'right', title:'操作', toolbar: '#departmentRowBar',align:'center',width:'180'}
+                ,{field:'percode', title:'权限编码',align:'center',sort:'true',width:180}
+                ,{fixed: 'right', title:'操作',  toolbar: '#permissionRowBar',align:'center',width:200}
             ] ]
-             ,done:function () {//返回数据执行回调函数
-                 layer.close(index);    //返回数据关闭loading
-             }
+            ,done:function () {//返回数据执行回调函数
+                layer.close(index);    //返回数据关闭loading
+            }
         });
         //模糊查询
         form.on("submit(doSearch)",function(data){
@@ -165,7 +169,7 @@
             return false;
         });
         //监听工具条的事件
-        table.on("toolbar(departmentTable)",function(obj){
+        table.on("toolbar(permissionTable)",function(obj){
             switch(obj.event){
                 case 'batchDelete':
                     batchDelete();
@@ -177,14 +181,14 @@
         });
 
         //监听行工具条的事件
-        table.on("tool(departmentTable)",function(obj){
+        table.on("tool(permissionTable)",function(obj){
             var data = obj.data; //获得当前行数据
             switch(obj.event){
                 case 'delete':
-                    deletedepartment(data);
+                    deletepermission(data);
                     break;
                 case 'edit':
-                    openUpdatedepartmentModal(data);
+                    openUpdatepermissionModal(data);
                     break;
             };
         });
@@ -201,7 +205,7 @@
                 title:'发布公告',
                 success:function(){
                     $("#dataFrm")[0].reset();
-                    url="/dept/add";
+                    url="/permission/add";
                 }
             });
         }
@@ -214,19 +218,9 @@
                 layer.msg(res.msg);
                 layer.close(mainIndex);
             })
-            return false;
         })
-        // $("#doSubmit").click(function(){
-        //     $.post(url,data,function(res){
-        //         if(res.code==200){
-        //             tableIns.reload();
-        //         }
-        //         layer.msg(res.msg);
-        //         layer.close(mainIndex);
-        //     })
-        // });
         //点击更新弹出更新框
-        function openUpdatedepartmentModal(data){
+        function openUpdatepermissionModal(data){
             mainIndex=layer.open({
                 type:1,
                 content:$("#addOrUpdateModal"),
@@ -234,12 +228,12 @@
                 title:'修改公告',
                 success:function(){
                     $("#dataFrm")[0].reset();
-                    //选中之前父级的部门  nodeId=data.pid;
+                    //选中之前父级的权限  nodeId=data.pid;
                     form.val("dataFrm",data);
                     dtree.dataInit("selectTree", data.pid);
                     dtree.setSelectValue("selectTree");
 
-                    url="/dept/update";
+                    url="/permission/update";
                 }
             });
         }
@@ -249,9 +243,9 @@
             width: "100%", // 可以在这里指定树的宽度来填满div
             dataStyle: "layuiStyle",  //使用layui风格的数据格式
             dataFormat: "list",  //配置data的风格为list
-            menubar:true,
+            permissionbar:true,
             response:{message:"msg",statusCode:0},  //修改response中返回数据的定义
-            url: "/dept/loadDeptTree", // 使用url加载（可与data加载同时存在）
+            url: "/permission/loadPermissionTree", // 使用url加载（可与data加载同时存在）
 
         });
         // 点击节点触发回调，其中obj内包含丰富的数据，打开浏览器F12查看！
@@ -260,9 +254,9 @@
             console.log(obj.param.nodeId); // 点击当前节点传递的参数
         });
         //删除单记录
-        function deletedepartment(data){
-            layer.confirm('你确定要删除['+data.title+']这个部门吗?', {icon: 3, title:'提示'}, function(index){
-                $.post("/dept/delete",{id:data.id},function(res){
+        function deletepermission(data){
+            layer.confirm('你确定要删除['+data.title+']这个权限吗?', {icon: 3, title:'提示'}, function(index){
+                $.post("/permission/delete",{id:data.id},function(res){
                     if(res.code==200){
                         tableIns.reload();
                     }
@@ -275,8 +269,8 @@
 
     });
 
-    //刷新表格数据(给右边部门树的节点调用)
-    function reloadDepartmentTable(id){
+    //刷新表格数据(给右边权限树的节点调用)
+    function reloadMeunTable(id){
         tableIns.reload({
             where:{id:id},
             page:{

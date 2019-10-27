@@ -7,11 +7,20 @@ import com.coderman.changku.sys.vo.DepartmentVo;
 import java.util.List;
 
 public interface DepartmentService {
+
+
+    /**
+     * 通过id查询部门
+     * @param id
+     * @return
+     */
+    public Department findOneById(Integer id);
+
     /**
      * 显示所有的部门
      * @return
      */
-    public List<Department> listAll();
+    List<Department> listAll();
 
     /**
      * 查询部门

@@ -10,9 +10,11 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
-    <link rel="icon" href="favicon.ico">
+    <link rel="icon" href="/favicon.ico">
     <link rel="stylesheet" href="/resources/layui/css/layui.css" media="all" />
     <link rel="stylesheet" href="/resources/css/public.css" media="all" />
+    <link rel="stylesheet" href="/resources/layui_ext/dtree/dtree.css" media="all" />
+    <link rel="stylesheet" href="/resources/layui_ext/dtree/font/dtreefont.css" media="all" />
 </head>
 <body class="childrenBody">
 <!--查询条件开始-->
@@ -53,7 +55,7 @@
 <div id="roleRowBar" style="display: none;">
     <button    type="button" lay-event="edit"  class="layui-btn   layui-btn-xs"><span class="layui-icon layui-icon-edit"></span>修改</button>
     <button    type="button" lay-event="delete"  class="layui-btn layui-btn-xs layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>删除</button>
-    <button    type="button" lay-event="show"  class="layui-btn layui-btn-xs layui-btn-normal"><span class="layui-icon icon-zhiding"></span>分配权限</button>
+    <button    type="button" lay-event="selectPermission"  class="layui-btn layui-btn-xs layui-btn-normal"><span class="layui-icon layui-icon-set-fill"></span>授权</button>
 </div>
 
 <!-- 添加和修改的弹出层开始 -->
@@ -91,16 +93,26 @@
 <!-- 添加和修改的弹出层结束 -->
 
 
+<!--分配权限弹出框开始-->
+<div style="display: none;" id="selectRolePermissionDiv">
+    <ul id="RolePermissionTree" class="dtree" data-id="0"></ul>
+</div>
+
+<!--分配权限弹出框结束-->
 
 <!--数据表格结束-->
 <script type="text/javascript" src="/resources/layui/layui.js"></script>
 <script type="text/javascript">
 
-    layui.use(['jquery','form','table','layer'],function () {
+    var rolePermissionTree;
+    layui.extend({
+        dtree: '/resources/layui_ext/dtree/dtree'   // {/}的意思即代表采用自有路径，即不跟随 base 路径
+    }).use(['jquery','form','table','layer','dtree'],function () {
         var $=layui.jquery;
         var layer=layui.layer;
         var form=layui.form;
         var table=layui.table;
+        var dtree=layui.dtree;
 
         //加载数据
         var tableIns =table.render({
@@ -117,7 +129,7 @@
                 ,{field:'available', title:'状态',align:'center',sort:'true',sort:'true',width:200,templet: function (d) {
                         return d.available==1?'<font color="#5FB878">可用</font>':'<font color="#FF5722">禁用</font>';
                     }}
-                ,{field:'createtime', title:'创建时间',align:'center',sort:'true',width:300}
+                ,{field:'createtime', title:'创建时间',align:'center',sort:'true',width:260}
                 ,{fixed: 'right',width:300, title:'操作', toolbar: '#roleRowBar',align:'center'}
             ] ]
         });
@@ -150,8 +162,56 @@
                 case 'edit':
                     openUpdateroleModal(data);
                     break;
+                case 'selectPermission':
+                    selectPermission(data);
+                    break;
             };
         });
+        var selectPermissionDiv;
+        //分配权限
+        function selectPermission(data) {
+            //弹出框
+            selectPermissionDiv=layer.open({
+                type:1,
+                content: $("#selectRolePermissionDiv"),
+                area:['500px','550px'],
+                title:'角色【'+data.name+'】分配权限',
+                success:function(){
+                    //查询角色的权限树
+                    rolePermissionTree= dtree.render({
+                        elem: "#RolePermissionTree",
+                        url: "/role/loadPermissionByRoleId?roleId="+data.id,
+                        dataStyle: "layuiStyle",  //使用layui风格的数据格式
+                        dataFormat: "list",  //配置data的风格为list
+                        response:{message:"msg",statusCode:0},  //修改response中返回数据的定义
+                        checkbar: true,
+                        checkbarType: "all" // 默认就是all，其他的值为： no-all  p-casc   self  only
+                    });
+                },
+                btn: ['<span class=layui-icon>&#xe605;确认分配</span>', '<span class=layui-icon>&#x1006;关闭窗口</span>'],
+                yes: function(index, layero){
+                    //得到树选中的所有节点
+                    var permissionData = dtree.getCheckbarNodesParam("RolePermissionTree");
+                    var params=data.id;//角色的id
+                    $.each(permissionData,function(index,item){
+                        params+="-"+item.nodeId;
+                    });
+                    $.post("/role/saveRolePermission",{"roleAndPermission":params},function(res){
+                        if(res.code==200){
+
+                        layer.msg(res.msg);
+                        layer.close(selectPermissionDiv);
+                        }
+                    })
+                },
+                btn2: function(index, layero){
+                    //return false 开启该代码可禁止点击该按钮关闭
+                },
+            });
+
+        }
+
+
         var mainIndex;
         var url;
         //打开添加的弹出层

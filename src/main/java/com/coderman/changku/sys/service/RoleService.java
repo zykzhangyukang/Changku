@@ -1,8 +1,12 @@
 package com.coderman.changku.sys.service;
 
 import com.coderman.changku.sys.commons.Page;
+import com.coderman.changku.sys.commons.TreeNode;
 import com.coderman.changku.sys.modal.Role;
 import com.coderman.changku.sys.vo.RoleVo;
+
+import java.util.List;
+import java.util.Map;
 
 public interface RoleService {
     /**
@@ -31,4 +35,23 @@ public interface RoleService {
      * @param role
      */
     void save(Role role);
+
+    /**
+     * 返回角色可以的权限树Json
+     * @param roleId
+     * @return
+     */
+    List<TreeNode> loadPermissionByRoleId(Integer roleId);
+
+    /**
+     * 给用户分配权限
+     * @param roleMap
+     */
+    void saveRolePermission(Map<String, Object> roleMap);
+
+    /**
+     * 清除用户的权限
+     * @param roleId
+     */
+    void cleanRolePermission(Integer roleId);
 }

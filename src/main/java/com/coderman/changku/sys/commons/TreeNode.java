@@ -19,8 +19,34 @@ public class TreeNode {
     private Boolean spread;
     private Integer parentId;
 
+    private String checkArr="0";//默认不选中
+
+
+
+
     private List<TreeNode> children=new ArrayList<>();
 
+    /**
+     * /用于角色分配数据返回格式
+     * @param id
+     * @param title
+     * @param spread
+     * @param checkArr
+     */
+    public TreeNode(Integer id, String title, Boolean spread, Integer parentId, String checkArr) {
+        this.id = id;
+        this.title = title;
+        this.spread = spread;
+        this.parentId = parentId;
+        this.checkArr = checkArr;
+    }
+
+    /**
+     * 用于左边菜单的数据返回格式
+     * @param id
+     * @param title
+     * @param spread
+     */
     public TreeNode(Integer id, Integer pid, String title, String icon, String href, Boolean spread) {
         this.id = id;
         this.pid = pid;
@@ -29,6 +55,7 @@ public class TreeNode {
         this.href = href;
         this.spread = spread;
     }
+
 
     public TreeNode(Integer id, Integer parentId, String title, Boolean spread) {
         this.id = id;

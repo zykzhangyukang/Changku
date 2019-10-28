@@ -2,16 +2,19 @@ package com.coderman.changku.sys.controller;
 
 import com.coderman.changku.sys.commons.Page;
 import com.coderman.changku.sys.commons.Result;
+import com.coderman.changku.sys.commons.TreeNode;
 import com.coderman.changku.sys.entities.ResultObj;
-import com.coderman.changku.sys.modal.LoginInfo;
 import com.coderman.changku.sys.modal.Role;
 import com.coderman.changku.sys.service.RoleService;
-import com.coderman.changku.sys.vo.LoginInfoVo;
 import com.coderman.changku.sys.vo.RoleVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 角色管理
@@ -23,6 +26,50 @@ public class RoleController {
     @Autowired
     private RoleService roleService;
 
+    /**
+     * 给角色分配权限
+     * @param roleAndPermission
+     * @return
+     */
+    @PostMapping("/saveRolePermission")
+    public ResultObj saveRolePermission(@RequestParam(name = "roleAndPermission", required = true) String roleAndPermission){
+        Integer roleId= null;
+        try {
+            if(roleAndPermission.contains("-")){
+                Map<String,Object> roleMap=new HashMap<>();
+                List<Integer> pids=new ArrayList<>();
+                String roleIdstr = roleAndPermission.split("-")[0];
+                roleId=Integer.parseInt(roleIdstr);
+                //解析pid
+                String substring = roleAndPermission.substring(roleIdstr.length() + 1, roleAndPermission.length()-roleIdstr.length() + 1);
+                String[] ps = substring.split("-");
+                for (String id : ps) {
+                    pids.add(Integer.parseInt(id));
+                }
+                roleMap.put("roleId",roleId) ;
+                roleMap.put("pids",pids);
+                roleService.saveRolePermission(roleMap);
+            }else {
+                //清除角色拥有的所有的权限(没有permission)
+                roleService.cleanRolePermission(Integer.parseInt(roleAndPermission));
+            }
+            return ResultObj.PERMISSION_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultObj.PERMISSION_ERROR;
+        }
+    }
+
+    /**
+     * 加载角色拥有的权限
+     * @param roleId
+     * @return
+     */
+    @PostMapping("/loadPermissionByRoleId")
+    public Result loadPermissionByRoleId(Integer roleId){
+        List<TreeNode> treeNodes=roleService.loadPermissionByRoleId(roleId);
+        return new Result(treeNodes);
+    }
     /**
      * 查询所有的角色
      * @param roleVo

@@ -89,6 +89,9 @@ public class PermissionServiceImpl implements PermissionService {
             if(permissionVo.getHref()!=null&&!"".equals(permissionVo.getHref())){
                 criteria.andHrefLike("%"+permissionVo.getHref()+"%");
             }
+            if(permissionVo.getPercode()!=null&&!"".equals(permissionVo.getPercode())){
+                criteria.andPercodeLike("%"+permissionVo.getPercode()+"%");
+            }
             if(permissionVo.getId()!=null&&!"".equals(permissionVo.getId())){
                 criteria.andIdEqualTo(permissionVo.getId());
                 criteria2.andPidEqualTo(permissionVo.getId()).andTypeEqualTo(type);

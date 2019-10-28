@@ -45,6 +45,7 @@ public class PermissionController {
     @PostMapping("/add")
     public ResultObj add(Permission Permission){
         try {
+            Permission.setType(Constast.PERMISSION_TYPE);
             permissionService.save(Permission);
             return ResultObj.ADD_SUCCESS;
         } catch (Exception e) {

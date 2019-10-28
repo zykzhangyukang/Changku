@@ -25,9 +25,9 @@
         <div class="layui-inline">
             <input class="layui-input" name="title" id="title" placeholder="权限名称" autocomplete="off">
         </div>&nbsp;
-        <span>URL:</span>
+        <span>权限编码:</span>
         <div class="layui-inline">
-            <input class="layui-input" name="href" id="address" placeholder="地址" autocomplete="off">
+            <input class="layui-input" name="percode" id="percode" placeholder="权限编码" autocomplete="off">
         </div>&nbsp;
         <button type="button" class="layui-btn layui-btn-normal"  lay-submit="" lay-filter="doSearch"><span class="layui-icon layui-icon-search"></span>搜索</button></legend>
         <button type="reset" class="layui-btn layui-btn-warm" ><span class="layui-icon layui-icon-refresh"></span>重置</button></legend>
@@ -65,19 +65,11 @@
                 <input type="hidden" id="key" name="id">
                 <input type="text" name="title" lay-verify="required" placeholder="请输入权限名称" autocomplete="off" class="layui-input">
             </div>
-            <label class="layui-form-label">URL</label>
-            <div class="layui-input-inline">
-                <input type="text" name="href" placeholder="请输入权限地址" autocomplete="off" class="layui-input">
-            </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">权限类型</label>
+            <label class="layui-form-label">权限编码</label>
             <div class="layui-input-inline">
-                <input type="text" name="type" lay-verify="required" placeholder="请输入权限类型" autocomplete="off" class="layui-input">
-            </div>
-            <label class="layui-form-label">图标icon</label>
-            <div class="layui-input-inline">
-                <input type="text" name="icon" lay-verify="required" placeholder="请输入图标" autocomplete="off" class="layui-input">
+                <input type="text" name="percode" lay-verify="required" placeholder="请输入权限编码" autocomplete="off" class="layui-input">
             </div>
         </div>
 

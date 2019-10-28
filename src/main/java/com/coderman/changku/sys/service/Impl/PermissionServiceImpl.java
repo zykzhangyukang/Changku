@@ -43,7 +43,7 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public void update(Permission permission) {
-        permissionMapper.updateByPrimaryKey(permission);
+        permissionMapper.updateByPrimaryKeySelective(permission);
     }
 
     @Override

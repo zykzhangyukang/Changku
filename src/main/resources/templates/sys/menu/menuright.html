@@ -71,10 +71,6 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">权限类型</label>
-            <div class="layui-input-inline">
-                <input type="text" name="type" lay-verify="required" placeholder="请输入权限类型" autocomplete="off" class="layui-input">
-            </div>
             <label class="layui-form-label">图标icon</label>
             <div class="layui-input-inline">
                 <input type="text" name="icon" lay-verify="required" placeholder="请输入图标" autocomplete="off" class="layui-input">
@@ -203,7 +199,7 @@
                 type:1,
                 content: $("#addOrUpdateModal"),
                 area:['800px','520px'],
-                title:'发布公告',
+                title:'创建新菜单',
                 success:function(){
                     $("#dataFrm")[0].reset();
                     url="/menu/add";
@@ -226,7 +222,7 @@
                 type:1,
                 content:$("#addOrUpdateModal"),
                 area:['800px','550'],
-                title:'修改公告',
+                title:'修改菜单',
                 success:function(){
                     $("#dataFrm")[0].reset();
                     //选中之前父级的菜单  nodeId=data.pid;

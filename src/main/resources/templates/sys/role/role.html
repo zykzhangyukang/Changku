@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>角色管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" href="/resources/layui/css/layui.css" media="all" />
+    <link rel="stylesheet" href="/resources/css/public.css" media="all" />
+</head>
+<body class="childrenBody">
+<!--查询条件开始-->
+<blockquote class="layui-elem-quote">
+    <form class="layui-form" action="" id="roleForm" method="post">
+           <span>角色标题:</span>&nbsp;
+            <div class="layui-inline">
+                <input class="layui-input" name="name" id="name" placeholder="角色名称" autocomplete="off">
+            </div>&nbsp;
+           <span>角色备注:</span>
+            <div class="layui-inline">
+                <input class="layui-input" name="remark" id="remark" placeholder="角色备注" autocomplete="off">
+            </div>&nbsp;
+            <span>可用状态:</span>
+            <div class="layui-inline">
+                <input type="radio" name="available" value="" title=全部 checked=""><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon"></i><div>男</div></div>
+                <input type="radio" name="available" value="1" title="可用" ><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon"></i><div>男</div></div>
+                <input type="radio" name="available" value="0" title="禁用"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>女</div></div>
+            </div>&nbsp;
+
+        &nbsp;
+        <button type="button" class="layui-btn layui-btn-normal"  lay-submit="" lay-filter="doSearch"><span class="layui-icon layui-icon-search"></span>搜索</button></legend>
+        <button type="reset" class="layui-btn layui-btn-warm" ><span class="layui-icon layui-icon-refresh"></span>重置</button></legend>
+    </form>
+</blockquote>
+<!--查询条件结束-->
+
+<!--数据表格开始-->
+<table class="layui-hide" id="roleTable" lay-filter="roleTable">
+</table>
+<!--数据表格结束-->
+
+<!--表格顶部工具栏部分--->
+<div id="roleToolBar" style="display: none;">
+    <button type="button"  lay-event="batchDelete"  class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>批量删除</button>
+    <button type="button"  lay-event="add"  class="layui-btn layui-btn-sm layui-btn-warning"><span class="layui-icon layui-icon-add-1"></span>添加</button>
+</div>
+<!--单行操作工具栏--->
+<div id="roleRowBar" style="display: none;">
+    <button    type="button" lay-event="edit"  class="layui-btn   layui-btn-xs"><span class="layui-icon layui-icon-edit"></span>修改</button>
+    <button    type="button" lay-event="delete"  class="layui-btn layui-btn-xs layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>删除</button>
+    <button    type="button" lay-event="show"  class="layui-btn layui-btn-xs layui-btn-normal"><span class="layui-icon icon-zhiding"></span>分配权限</button>
+</div>
+
+<!-- 添加和修改的弹出层开始 -->
+<div style="display: none;padding: 5px" id="addOrUpdateModal">
+    <form action="" method="post" class="layui-form layui-form-pane" id="dataFrm" lay-filter="dataFrm">
+        <div class="layui-form-item">
+            <label class="layui-form-label">角色名称</label>
+            <div class="layui-input-block">
+                <input type="hidden" id="key" name="id" value="">
+                <input type="text" name="name" lay-verify="required" autocomplete="off" placeholder="请输入角色名称" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">角色备注</label>
+            <div class="layui-input-block">
+                <textarea type="remark" class="layui-textarea"  name="remark"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">可用状态</label>
+            <div class="layui-input-block">
+
+                <input type="radio" name="available" value="1" title="可用" ><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon"></i><div>男</div></div>
+                <input type="radio" name="available" value="0" title="禁用"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>女</div></div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button type="button" class="layui-btn" lay-submit="" id="doSubmit" ><span class="layui-icon layui-icon-add-1"></span>发布</button>
+                <button type="reset" class="layui-btn layui-btn-warm"><span class="layui-icon layui-icon-refresh-1"></span>重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+<!-- 添加和修改的弹出层结束 -->
+
+
+
+<!--数据表格结束-->
+<script type="text/javascript" src="/resources/layui/layui.js"></script>
+<script type="text/javascript">
+
+    layui.use(['jquery','form','table','layer'],function () {
+        var $=layui.jquery;
+        var layer=layui.layer;
+        var form=layui.form;
+        var table=layui.table;
+
+        //加载数据
+        var tableIns =table.render({
+            elem: '#roleTable'
+            ,url:'/role/listRoles'
+            ,toolbar: '#roleToolBar' //开启头部工具栏，并为其绑定左侧模板
+            ,title: '用户登入日志数据表'
+            ,height:'full-60'
+            ,page: true
+            ,cols: [ [
+                ,{field:'id', title:'ID',align:'center',sort:'true',width:100}
+                ,{field:'name', title:'角色名称',align:'center',width:200}
+                ,{field:'remark', title:'角色备注',align:'center',width:300}
+                ,{field:'available', title:'状态',align:'center',sort:'true',sort:'true',width:200,templet: function (d) {
+                        return d.available==1?'<font color="#5FB878">可用</font>':'<font color="#FF5722">禁用</font>';
+                    }}
+                ,{field:'createtime', title:'创建时间',align:'center',sort:'true',width:300}
+                ,{fixed: 'right',width:300, title:'操作', toolbar: '#roleRowBar',align:'center'}
+            ] ]
+        });
+        //模糊查询
+        form.on("submit(doSearch)",function(data){
+            tableIns.reload({
+                where:data.field,
+                page:{
+                    curr:1
+                }
+            });
+            return false;
+        });
+        //监听工具条的事件
+        table.on("toolbar(roleTable)",function(obj){
+            switch(obj.event){
+                case 'add':
+                    openAddModal();
+                    break;
+            };
+        });
+
+        //监听行工具条的事件
+        table.on("tool(roleTable)",function(obj){
+            var data = obj.data; //获得当前行数据
+            switch(obj.event){
+                case 'delete':
+                    deleterole(data);
+                    break;
+                case 'edit':
+                    openUpdateroleModal(data);
+                    break;
+            };
+        });
+        var mainIndex;
+        var url;
+        //打开添加的弹出层
+        function openAddModal(){
+            $("#key").val("");
+            mainIndex=layer.open({
+                type:1,
+                content: $("#addOrUpdateModal"),
+                area:['800px','520px'],
+                title:'创建角色',
+                success:function(){
+                    $("#dataFrm")[0].reset();
+                    url="/role/add";
+                }
+            });
+        }
+        //发布角色
+        $("#doSubmit").click(function(){
+            var data=$("#dataFrm").serialize();
+            $.post(url,data,function(res){
+                if(res.code==200){
+                    tableIns.reload();
+                }
+                layer.msg(res.msg);
+                layer.close(mainIndex);
+            })
+        });
+        //点击更新弹出更新框
+        function openUpdateroleModal(data){
+            mainIndex=layer.open({
+                type:1,
+                content:$("#addOrUpdateModal"),
+                area:['800px','550'],
+                title:'修改角色',
+                success:function(){
+                    $("#dataFrm")[0].reset();
+                    //装载新的数据
+                    form.val("dataFrm",data);
+                    url="/role/update";
+                }
+            });
+        }
+
+        //删除单记录
+        function deleterole(data){
+            layer.confirm('你确定要删除['+data.name+']这条角色吗?', {icon: 3, title:'提示'}, function(index){
+                $.post("/role/delete",{id:data.id},function(res){
+                    if(res.code==200){
+                        tableIns.reload();
+                    }
+                    layer.msg(res.msg);
+                })
+                layer.close(index);
+            });
+        }
+
+
+
+    });
+</script>
+</body>
+</html>

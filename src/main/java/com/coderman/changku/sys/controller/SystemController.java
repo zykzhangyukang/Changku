@@ -9,6 +9,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class SystemController {
 
 
+    /**
+     * 跳转到Icon管理页面
+     * @return
+     */
+    @GetMapping("/toIconManager")
+    public String toIconManager(){
+        return "sys/icon/icon";
+    }
+
+
+
+    /**
+     * 跳转到角色管理页面
+     * @return
+     */
+    @GetMapping("/toRoleManager")
+    public String toRoleManager(){
+        return "sys/role/role";
+    }
+
 
     /**
      * 跳转到权限管理页面

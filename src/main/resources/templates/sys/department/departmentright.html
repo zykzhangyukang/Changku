@@ -131,7 +131,7 @@
             elem: '#departmentTable'
             ,url:'/dept/listDepartments'
             ,toolbar: '#departmentToolBar' //开启头部工具栏，并为其绑定左侧模板
-            ,title: '用户登入日志数据表'
+            ,title: '部门信息数据表'
             ,height:'full-60'
             ,page: true
             ,cols: [ [
@@ -198,7 +198,7 @@
                 type:1,
                 content: $("#addOrUpdateModal"),
                 area:['800px','520px'],
-                title:'发布公告',
+                title:'添加部门',
                 success:function(){
                     $("#dataFrm")[0].reset();
                     url="/dept/add";
@@ -231,7 +231,7 @@
                 type:1,
                 content:$("#addOrUpdateModal"),
                 area:['800px','550'],
-                title:'修改公告',
+                title:'修改部门信息',
                 success:function(){
                     $("#dataFrm")[0].reset();
                     //选中之前父级的部门  nodeId=data.pid;

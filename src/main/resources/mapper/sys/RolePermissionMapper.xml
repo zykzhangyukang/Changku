@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.coderman.changku.sys.mapper.RolePermissionMapper" >
+  <resultMap id="BaseResultMap" type="com.coderman.changku.sys.modal.RolePermissionKey" >
+    <id column="pid" property="pid" jdbcType="INTEGER" />
+    <id column="rid" property="rid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    pid, rid
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.coderman.changku.sys.modal.RolePermissionExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from sys_role_permission
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.coderman.changku.sys.modal.RolePermissionKey" >
+    delete from sys_role_permission
+    where pid = #{pid,jdbcType=INTEGER}
+      and rid = #{rid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.coderman.changku.sys.modal.RolePermissionExample" >
+    delete from sys_role_permission
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.coderman.changku.sys.modal.RolePermissionKey" >
+    insert into sys_role_permission (pid, rid)
+    values (#{pid,jdbcType=INTEGER}, #{rid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.coderman.changku.sys.modal.RolePermissionKey" >
+    insert into sys_role_permission
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="pid != null" >
+        pid,
+      </if>
+      <if test="rid != null" >
+        rid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="pid != null" >
+        #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="rid != null" >
+        #{rid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.coderman.changku.sys.modal.RolePermissionExample" resultType="java.lang.Integer" >
+    select count(*) from sys_role_permission
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update sys_role_permission
+    <set >
+      <if test="record.pid != null" >
+        pid = #{record.pid,jdbcType=INTEGER},
+      </if>
+      <if test="record.rid != null" >
+        rid = #{record.rid,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update sys_role_permission
+    set pid = #{record.pid,jdbcType=INTEGER},
+      rid = #{record.rid,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>

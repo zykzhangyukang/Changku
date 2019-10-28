@@ -73,6 +73,7 @@ public class MenuController {
     @PostMapping("/add")
     public ResultObj add(Permission Permission){
         try {
+            Permission.setType(Constast.MENU_TYPE);
             permissionService.save(Permission);
             return ResultObj.ADD_SUCCESS;
         } catch (Exception e) {

@@ -11,9 +11,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/sys")
 public class SystemController {
 
-
-
-
+    /**
+     * 跳转到用户管理页面左边
+     * @return
+     */
+    @GetMapping("/toUserLeft")
+    public String toUserLeft(){
+        return "sys/user/userleft";
+    }
+    /**
+     * 跳转到用户右边
+     * @return
+     */
+    @GetMapping("/toUserRight")
+    public String toUserRight(){
+        return "sys/user/userright";
+    }
     /**
      * 跳转到用户管理页面
      * @return

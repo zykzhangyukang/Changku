@@ -8,6 +8,7 @@
         u.`loginname`,
         u.`address`,
         u.`sex`,
+        u.`deptid`,
         u.`remark` ,
         u.`hiredate` ,
         u.`available` ,
@@ -36,6 +37,9 @@
             </if>
             <if test="address!=null and address!=''">
                 and u.address like '%${address}%'
+            </if>
+            <if test="deptid!=null and deptid!=''">
+                and u.deptid =#{deptid}
             </if>
             <if test="available!=null and available!=''">
                 and u.available=#{available}

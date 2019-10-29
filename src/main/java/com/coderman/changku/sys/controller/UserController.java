@@ -1,5 +1,6 @@
 package com.coderman.changku.sys.controller;
 
+import com.coderman.changku.sys.commons.Constast;
 import com.coderman.changku.sys.commons.Page;
 import com.coderman.changku.sys.commons.Result;
 import com.coderman.changku.sys.entities.ResultObj;
@@ -9,10 +10,7 @@ import com.coderman.changku.sys.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 用户管理
@@ -91,6 +89,8 @@ public class UserController {
     @PostMapping("/update")
     public ResultObj update(User user){
         try {
+            user.setType(Constast.USER_TYPE);
+            user.setHiredate(new Date(System.currentTimeMillis()));
             userService.update(user);
             return ResultObj.UPDATE_SUCCESS;
         } catch (Exception e) {

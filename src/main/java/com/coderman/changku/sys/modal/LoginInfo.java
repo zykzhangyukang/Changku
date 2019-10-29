@@ -1,7 +1,5 @@
 package com.coderman.changku.sys.modal;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import java.util.Date;
 
 public class LoginInfo {
@@ -11,8 +9,9 @@ public class LoginInfo {
 
     private String loginip;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date logintime;
+
+    private String address;
 
     public Integer getId() {
         return id;
@@ -44,5 +43,13 @@ public class LoginInfo {
 
     public void setLogintime(Date logintime) {
         this.logintime = logintime;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address == null ? null : address.trim();
     }
 }

@@ -41,6 +41,6 @@
 			<property name="enableSubPackages" value="true" />
 		</javaClientGenerator>
 		<!-- table指定每个表的生成策略 -->
-		<table tableName="sys_user" domainObjectName="RoleUser"></table>
+		<table tableName="sys_login_info" domainObjectName="LoginInfo"></table>
 	</context>
 </generatorConfiguration>

@@ -1,6 +1,8 @@
 package com.coderman.changku.sys.controller;
 
 import com.coderman.changku.sys.commons.ActiveUser;
+import com.coderman.changku.sys.commons.AddressUtils;
+import com.coderman.changku.sys.commons.Constast;
 import com.coderman.changku.sys.commons.WebUtil;
 import com.coderman.changku.sys.entities.ResultObj;
 import com.coderman.changku.sys.modal.LoginInfo;
@@ -31,7 +33,7 @@ public class LoginController {
      */
     @PostMapping("/login")
     public ResultObj login(@RequestParam("username") String username,
-                           @RequestParam("password") String password){
+                           @RequestParam("password") String password) {
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(username, password);
         try {
@@ -44,6 +46,14 @@ public class LoginController {
             loginInfo.setLoginname(activeUser.getUser().getName()+"-"+activeUser.getUser().getLoginname());
             loginInfo.setLoginip(WebUtil.getRequest().getRemoteAddr());
             loginInfo.setLogintime(new Date(System.currentTimeMillis()));
+            //根据Ip获取用户的登入地点。
+            try {
+                loginInfo.setAddress(
+                        AddressUtils.getAddress("ip="+WebUtil.getRequest().getRemoteAddr().toString(), "utf-8")
+                );
+            } catch (Exception e) {
+                loginInfo.setAddress(Constast.IP_ADDRESS);
+            }
             loginRecord(loginInfo);
             return ResultObj.LOGIN_SUCCESS;
         }catch (AuthenticationException e){

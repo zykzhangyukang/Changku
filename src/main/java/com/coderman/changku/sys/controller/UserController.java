@@ -7,6 +7,7 @@ import com.coderman.changku.sys.entities.ResultObj;
 import com.coderman.changku.sys.modal.User;
 import com.coderman.changku.sys.service.UserService;
 import com.coderman.changku.sys.vo.UserVo;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +23,21 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-
+    /**
+     * 重置用户的密码
+     * @param uid
+     * @return
+     */
+    @PostMapping("/resetPwd")
+    public ResultObj resetPws(Integer uid){
+        try {
+            userService.resetPwd(uid);
+            return ResultObj.RESET_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultObj.RESET_ERROR;
+        }
+    }
     /**
      * 给用户分配角色
      * @return
@@ -55,6 +70,17 @@ public class UserController {
             return ResultObj.ROLE_ERROR;
         }
     }
+
+    /**
+     * 加载用户的上级领导
+     * @return
+     */
+    @GetMapping("/loadManagers")
+    public Result loadManagers(Integer deptid,Integer uid){
+        List<User> managers=userService.loadManagers(deptid,uid);
+        return new Result(managers);
+    }
+
     /**
      * 获取所有的可用的角色
      * @return
@@ -89,8 +115,6 @@ public class UserController {
     @PostMapping("/update")
     public ResultObj update(User user){
         try {
-            user.setType(Constast.USER_TYPE);
-            user.setHiredate(new Date(System.currentTimeMillis()));
             userService.update(user);
             return ResultObj.UPDATE_SUCCESS;
         } catch (Exception e) {
@@ -107,6 +131,12 @@ public class UserController {
     @PostMapping("/add")
     public ResultObj add(User user){
         try {
+            user.setType(Constast.USER_TYPE);
+            user.setHiredate(new Date(System.currentTimeMillis()));
+            user.setMgr(1);//默认的管理者
+            String salt=UUID.randomUUID().toString().toUpperCase();
+            user.setSalt(salt);
+            user.setPwd(new Md5Hash(Constast.DEFAULT_PASSWORD,salt,Constast.MD5_TIME).toString()); //设置用户的默认密码
             userService.add(user);
             return ResultObj.ADD_SUCCESS;
         } catch (Exception e) {

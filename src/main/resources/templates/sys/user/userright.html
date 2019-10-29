@@ -61,6 +61,7 @@
 <div id="userRowBar" style="display: none;">
     <button    type="button" lay-event="edit"  class="layui-btn   layui-btn-xs"><span class="layui-icon layui-icon-edit"></span>修改</button>
     <button    type="button" lay-event="delete"  class="layui-btn layui-btn-xs layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>删除</button>
+    <button    type="button" lay-event="resetPwd"  class="layui-btn layui-btn-xs layui-btn-warm"><span class="layui-icon layui-icon-password"></span>重置密码</button>
     <button    type="button" lay-event="giveRole"  class="layui-btn layui-btn-xs layui-btn-normal"><span class="layui-icon layui-icon-set-fill"></span>分配</button>
 </div>
 
@@ -73,11 +74,20 @@
                 <input type="hide" style="display: none" id="key" name="id">
                 <input type="text" name="name" lay-verify="required" autocomplete="off" placeholder="请输入用户姓名" class="layui-input">
             </div>
+        </div>
+        <div class="layui-form-item">
             <label class="layui-form-label">所属部门</label>
             <div class="layui-input-inline">
                 <input type="hidden" name="deptid" id="deptid">
-                <ul id="selectTree" class="dtree" data-id="0" ></ul></div>
+                <ul id="selectTree" class="dtree" data-id="0" ></ul>
             </div>
+            <label class="layui-form-label">上级领导</label>
+            <div class="layui-input-inline">
+                <select name="mgr" id="managers">
+                </select>
+            </div>
+
+        </div>
         <div class="layui-form-item">
             <label class="layui-form-label">登入昵称</label>
             <div class="layui-input-block">
@@ -111,8 +121,14 @@
             </div>
         </div>
         <div class="layui-form-item">
+            <label class="layui-form-label">排序码</label>
+            <div class="layui-input-block">
+                <input type="text" name="ordernum" lay-verify="required" autocomplete="off" placeholder="排序码" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
             <div class="layui-input-block" >
-                <button type="button" class="layui-btn" lay-submit="" id="doSubmit" ><span class="layui-icon layui-icon-add-1"></span>发布</button>
+                <button type="button" class="layui-btn" lay-submit="" id="doSubmit" lay-filter="doSubmit" ><span class="layui-icon layui-icon-add-1"></span>发布</button>
                 <button type="reset" class="layui-btn layui-btn-warm"><span class="layui-icon layui-icon-refresh-1"></span>重置</button>
             </div>
         </div>
@@ -161,7 +177,8 @@
                     }}
                 ,{field:'dept', title:'部门名称',align:'center',width:'120'}
                 ,{field:'manager', title:'直属领导',align:'center',width:'100'}
-                ,{field:'deptid', title:'deptid',align:'center',width:'100'}
+                ,{field:'deptid',hide:true, title:'deptid',align:'center',width:'100'}
+                ,{field:'mgr',hide:true, title:'mgr',align:'center',width:'100'}
                 ,{field:'address', title:'用户地址',align:'center',width:'150'}
                 ,{field:'remark', title:'用户备注',align:'center',width:'150'}
                 ,{field:'hiredate', title:'入职时间',align:'center',width:'180'}
@@ -170,7 +187,7 @@
                     }}
                 ,{field:'ordernum', title:'排序码',align:'center',width:'100'}
                 ,{field:'imgpath', title:'用户头像',align:'center',width:'200'}
-                ,{fixed: 'right', title:'操作', toolbar: '#userRowBar',align:'center',width:'250'}
+                ,{fixed: 'right', title:'操作', toolbar: '#userRowBar',align:'center',width:'320'}
             ] ]
         });
         //模糊查询
@@ -206,8 +223,18 @@
                 case 'giveRole':
                     giveRole(data);
                     break;
+                case 'resetPwd':
+                    resetPwd(data);
+                    break;
             };
         });
+        //重置用户密码
+        function resetPwd(data) {
+            $.post("/user/resetPwd",{"uid":data.id},function (res) {
+                layer.msg(res.msg);
+                layer.close(mainIndex);
+            })
+        }
         var selectPermissionDiv;
         //分配角色
         function giveRole(data) {
@@ -229,6 +256,8 @@
                             elem: '#test1'
                             ,data: data.data.allRoles
                             ,value: arrayObj
+                            ,title: ['未拥有的角色', '已拥有的角色']
+                            ,showSearch: true
                             ,id: 'demo1' //定义索引
                         })
                     })
@@ -268,7 +297,18 @@
         // 点击节点触发回调，其中obj内包含丰富的数据，打开浏览器F12查看！
         dtree.on("node(selectTree)" ,function(obj){
             $("#deptid").val(obj.param.nodeId);
-            console.log(obj.param.nodeId); // 点击当前节点传递的参数
+            //动态加载这个部门的所有的用户（作为新增用户的领导）
+            $("#managers").html("");
+            $.get("/user/loadManagers",{"deptid":obj.param.nodeId},function (res) {
+                var dom_mgr=$("#managers");
+                var html="";
+                $.each(res.data,function(index,item){
+                    //创建下拉菜单
+                    html+="<option value='"+item.id+"'>"+item.name+"</option>";
+                });
+                dom_mgr.html(html);
+                form.render("select");
+            })
         });
         var mainIndex;
         var url;
@@ -282,21 +322,21 @@
                 title:'创建用户',
                 success:function(){
                     $("#dataFrm")[0].reset();
+                    $("#managers").html("");
                     url="/user/add";
                 }
             });
         }
-        //发布用户
-        $("#doSubmit").click(function(){
-            var data=$("#dataFrm").serialize();
-            $.post(url,data,function(res){
+        //添加
+        form.on("submit(doSubmit)",function (data) {
+            $.post(url,data.field,function(res){
                 if(res.code==200){
                     tableIns.reload();
                 }
                 layer.msg(res.msg);
                 layer.close(mainIndex);
             })
-        });
+        })
         //点击更新弹出更新框
         function openUpdateuserModal(data){
             mainIndex=layer.open({
@@ -310,6 +350,20 @@
                     form.val("dataFrm",data);
                     dtree.dataInit("selectTree", data.deptid);
                     dtree.setSelectValue("selectTree");
+
+                    //动态加载这个部门的所有的用户（作为新增用户的领导）
+                    $.get("/user/loadManagers",{"deptid":data.mgr,"uid":data.id},function (res) {
+                        var dom_mgr=$("#managers");
+                        var html="";
+                        $.each(res.data,function(index,item){
+                            //创建下拉菜单
+                            html+="<option value='"+item.id+"'>"+item.name+"</option>";
+                        });
+                        dom_mgr.html(html);
+                        //选中一个
+                        dom_mgr.val(data.mgr);
+                        form.render("select");
+                    })
                     url="/user/update";
                 }
             });

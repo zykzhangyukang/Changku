@@ -42,7 +42,7 @@ mybatis:
 #shiro的配置
 shiro:
   hash-algorithm-name: md5
-  hash-iterations: 2
+  hash-iterations: 1024
   anon-urls:
   - /index.html*
   - /sys/toLogin*

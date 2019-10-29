@@ -1,7 +1,6 @@
 package com.coderman.changku.sys.service;
 
 import com.coderman.changku.sys.commons.Page;
-import com.coderman.changku.sys.commons.RoleJson;
 import com.coderman.changku.sys.modal.User;
 import com.coderman.changku.sys.vo.UserVo;
 
@@ -70,4 +69,18 @@ public interface UserService {
      * @param i
      */
     void cleanUserRoles(int i);
+
+    /**
+     * 重置用户的密码
+     * @param uid
+     */
+    void resetPwd(Integer uid);
+
+    /**
+     * 加载用户的上级领导
+     * @param deptid
+     * @param uid
+     * @return
+     */
+    List<User> loadManagers(Integer deptid, Integer uid);
 }

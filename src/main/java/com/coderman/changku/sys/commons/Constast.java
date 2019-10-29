@@ -27,4 +27,17 @@ public interface Constast {
      * 用户类型
      */
     Integer USER_TYPE = 1;
+    /**
+     * IP
+     */
+    String IP_ADDRESS = "本机IP";
+
+    /**
+     * 用户的默认密码
+     */
+    Object DEFAULT_PASSWORD = "zhangyukang";
+    /**
+     * 加密的次数
+     */
+    int MD5_TIME = 1024;
 }

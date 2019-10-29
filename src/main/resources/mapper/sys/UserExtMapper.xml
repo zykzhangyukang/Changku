@@ -13,6 +13,7 @@
         u.`hiredate` ,
         u.`available` ,
         u.`ordernum` ,
+        u.`mgr` ,
         u.`type` ,
         u.`imgpath`,
         d.`title` dept,

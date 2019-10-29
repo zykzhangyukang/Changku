@@ -30,6 +30,9 @@ public class ResultObj {
     public static final ResultObj ROLE_SUCCESS = new ResultObj(Constast.OK,"分配角色成功");
     public static final ResultObj ROLE_ERROR = new ResultObj(Constast.OK,"分配角色失败");
 
+    public static final ResultObj RESET_SUCCESS = new ResultObj(Constast.OK,"重置密码成功");
+    public static final ResultObj RESET_ERROR = new ResultObj(Constast.OK,"重置密码失败");
+
 
     private Integer code;
     private String msg;

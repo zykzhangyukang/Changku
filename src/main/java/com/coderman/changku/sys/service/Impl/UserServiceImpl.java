@@ -7,16 +7,13 @@ import com.coderman.changku.sys.modal.*;
 import com.coderman.changku.sys.service.UserService;
 import com.coderman.changku.sys.vo.UserVo;
 import com.github.pagehelper.Page;
-import com.github.pagehelper.PageException;
 import com.github.pagehelper.PageHelper;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -35,13 +32,20 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserExtMapper userExtMapper;
 
+
     @Override
     public void add(User user) {
         userMapper.insertSelective(user);
     }
 
+
+    @Transactional
     @Override
     public void delete(Integer id) {
+        //删除用户中间表的数据
+        RoleUserExample example = new RoleUserExample();
+        example.createCriteria().andUidEqualTo(id);
+        roleUserMapper.deleteByExample(example);
         userMapper.deleteByPrimaryKey(id);
     }
 
@@ -144,6 +148,27 @@ public class UserServiceImpl implements UserService {
         RoleUserExample example = new RoleUserExample();
         example.createCriteria().andUidEqualTo(i);
         roleUserMapper.deleteByExample(example);
+    }
+
+    @Override
+    public void resetPwd(Integer uid) {
+        User user = new User();
+        user.setId(uid);
+        String salt= UUID.randomUUID().toString().toUpperCase();
+        user.setSalt(salt);
+        user.setPwd(new Md5Hash(Constast.DEFAULT_PASSWORD,salt,Constast.MD5_TIME).toString()); //设置用户的默认密码
+        userMapper.updateByPrimaryKeySelective(user);
+    }
+
+    @Override
+    public List<User> loadManagers(Integer deptid, Integer uid) {
+        UserExample example = new UserExample();
+        if(uid!=null){
+            example.createCriteria().andIdNotEqualTo(uid);
+        }
+        example.createCriteria().andDeptidEqualTo(deptid);
+        List<User> users = userMapper.selectByExample(example);
+        return users;
     }
 
     /**

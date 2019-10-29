@@ -23,4 +23,8 @@ public interface Constast {
      * 展开类型
      */
     Integer OPEN_TRUE = 1;
+    /**
+     * 用户类型
+     */
+    Integer USER_TYPE = 1;
 }

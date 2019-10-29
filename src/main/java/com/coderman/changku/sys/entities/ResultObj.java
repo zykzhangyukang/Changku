@@ -27,6 +27,9 @@ public class ResultObj {
     public static final ResultObj PERMISSION_SUCCESS = new ResultObj(Constast.OK,"授权成功");
     public static final ResultObj PERMISSION_ERROR = new ResultObj(Constast.OK,"授权失败");
 
+    public static final ResultObj ROLE_SUCCESS = new ResultObj(Constast.OK,"分配角色成功");
+    public static final ResultObj ROLE_ERROR = new ResultObj(Constast.OK,"分配角色失败");
+
 
     private Integer code;
     private String msg;

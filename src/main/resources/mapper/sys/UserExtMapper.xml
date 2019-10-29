@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.coderman.changku.sys.mapper.UserExtMapper">
+    <select parameterType="com.coderman.changku.sys.vo.UserVo" id="listUsersById" resultType="com.coderman.changku.sys.modal.User">
+        SELECT
+        u.`id`,
+        u.`name`,
+        u.`loginname`,
+        u.`address`,
+        u.`sex`,
+        u.`remark` ,
+        u.`hiredate` ,
+        u.`available` ,
+        u.`ordernum` ,
+        u.`type` ,
+        u.`imgpath`,
+        d.`title` dept,
+        u2.`name` manager
+        FROM sys_user u,sys_dept d,sys_user u2
+        <where>
+            u.`deptid`=d.`id` AND u.`mgr`=u2.`id`
+            <if test="id!=null and id!=''">
+                and u.id=#{id}
+            </if>
+            <if test="name!=null and name!=''">
+                and u.name like '%${name}%'
+            </if>
+            <if test="loginname!=null and loginname!=''">
+                and u.loginname like '%${loginname}%'
+            </if>
+            <if test="remark!=null and remark!=''">
+                and u.remark like '%${remark}%'
+            </if>
+            <if test="sex!=null and sex!=''">
+                and u.sex like '%${sex}%'
+            </if>
+            <if test="address!=null and address!=''">
+                and u.address like '%${address}%'
+            </if>
+            <if test="available!=null and available!=''">
+                and u.available=#{available}
+            </if>
+        </where>
+
+    </select>
+</mapper>

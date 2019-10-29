@@ -4,9 +4,26 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+/**
+ * 路由跳转
+ */
 @Controller
 @RequestMapping("/sys")
 public class SystemController {
+
+
+
+
+    /**
+     * 跳转到用户管理页面
+     * @return
+     */
+    @GetMapping("/toUserManager")
+    public String toUserManager(){
+        return "sys/user/user";
+    }
+
+
 
 
     /**

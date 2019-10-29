@@ -33,6 +33,26 @@ public class User {
 
     private String salt;
 
+    private String dept;
+
+    private String manager;
+
+    public String getDept() {
+        return dept;
+    }
+
+    public void setDept(String dept) {
+        this.dept = dept;
+    }
+
+    public String getManager() {
+        return manager;
+    }
+
+    public void setManager(String manager) {
+        this.manager = manager;
+    }
+
     public Integer getId() {
         return id;
     }

@@ -3,20 +3,29 @@ package com.coderman.changku.sys.service.Impl;
 import com.coderman.changku.sys.commons.Constast;
 import com.coderman.changku.sys.commons.Page;
 import com.coderman.changku.sys.mapper.PermissionMapper;
+import com.coderman.changku.sys.mapper.RolePermissionMapper;
 import com.coderman.changku.sys.modal.Permission;
 import com.coderman.changku.sys.modal.PermissionExample;
+import com.coderman.changku.sys.modal.RolePermissionExample;
+import com.coderman.changku.sys.modal.RolePermissionKey;
 import com.coderman.changku.sys.service.PermissionService;
 import com.coderman.changku.sys.vo.PermissionVo;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class PermissionServiceImpl implements PermissionService {
     @Autowired
     private PermissionMapper permissionMapper;
+
+    @Autowired
+    private RolePermissionMapper rolePermissionMapper;
 
     @Override
     public List<Permission> findMenu() {
@@ -69,6 +78,25 @@ public class PermissionServiceImpl implements PermissionService {
         List<Permission> permissions = permissionMapper.selectByExample(permissionExample);
         com.github.pagehelper.Page<Permission> permissionPage= (com.github.pagehelper.Page<Permission>) permissions;
         return new Page<>(permissionPage.getTotal(),permissionPage.getResult());
+    }
+
+    @Override
+    public List<Permission> findMenuByRids(List<Integer> currentUserRoleIds) {
+        RolePermissionExample example = new RolePermissionExample();
+        example.createCriteria().andRidIn(currentUserRoleIds);
+        List<RolePermissionKey> rolePermissionKeyList = rolePermissionMapper.selectByExample(example);
+        Set<Integer> set=null;
+        if(rolePermissionKeyList.size()>0){
+          set=new HashSet<>();
+            for (RolePermissionKey rolePermissionKey : rolePermissionKeyList) {
+                Integer pid = rolePermissionKey.getPid();
+                set.add(pid);
+            }
+        }
+        PermissionExample example1 = new PermissionExample();
+        example1.createCriteria().andTypeEqualTo(Constast.MENU_TYPE).andIdIn(new ArrayList<>(set));
+        List<Permission> permissions = permissionMapper.selectByExample(example1);
+        return permissions;
     }
 
     /**

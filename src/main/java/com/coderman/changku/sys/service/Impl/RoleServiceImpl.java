@@ -141,4 +141,20 @@ public class RoleServiceImpl implements RoleService {
         example.createCriteria().andRidEqualTo(roleId);
         rolePermissionMapper.deleteByExample(example);
     }
+
+    @Override
+    public List<Integer> findRoleIdsByUserId(Integer id) {
+        RoleUserExample example = new RoleUserExample();
+        example.createCriteria().andUidEqualTo(id);
+        List<RoleUserKey> roleUserKeys = roleUserMapper.selectByExample(example);
+        if(roleUserKeys.size()>0){
+            List<Integer> rids=new ArrayList<>();
+            for (RoleUserKey roleUserKey : roleUserKeys) {
+                rids.add(roleUserKey.getRid());
+            }
+            return rids;
+        }else {
+            return new ArrayList<>();
+        }
+    }
 }

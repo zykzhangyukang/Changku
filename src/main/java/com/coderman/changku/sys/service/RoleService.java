@@ -54,4 +54,11 @@ public interface RoleService {
      * @param roleId
      */
     void cleanRolePermission(Integer roleId);
+
+    /**
+     * 根据用户ID获取用户角色
+     * @param id
+     * @return
+     */
+    List<Integer> findRoleIdsByUserId(Integer id);
 }

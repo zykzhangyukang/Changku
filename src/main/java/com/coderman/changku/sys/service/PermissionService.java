@@ -60,4 +60,11 @@ public interface PermissionService {
      * @return
      */
     Page<Permission> findPermissionPage(PermissionVo permissionVo, Integer pageNo, int pageSize);
+
+    /**
+     * 获取用户的菜单根据角色
+     * @param currentUserRoleIds
+     * @return
+     */
+    List<Permission> findMenuByRids(List<Integer> currentUserRoleIds);
 }

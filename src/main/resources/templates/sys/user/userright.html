@@ -81,7 +81,7 @@
                 <input type="hidden" name="deptid" id="deptid">
                 <ul id="selectTree" class="dtree" data-id="0" ></ul>
             </div>
-            <label class="layui-form-label">上级领导</label>
+            <label class="layui-form-label">上级大佬</label>
             <div class="layui-input-inline">
                 <select name="mgr" id="managers">
                 </select>
@@ -266,11 +266,11 @@
                 yes: function(index, layero){
                     //给用户分配角色
                     var getData = transfer.getData('demo1');
-                    var params=data.id;
+                    var params="uid="+data.id;
                     $.each(getData,function(index,item){
-                        params+="-"+item.value;
+                        params+="&ids="+item.value;
                     });
-                    $.get("/user/saveUserRoles",{"userIdAndRole":params},function(res){
+                    $.get("/user/saveUserRoles",params,function(res){
                         if(res.code==200){
                             layer.close(selectPermissionDiv);
                             layer.msg(res.msg);

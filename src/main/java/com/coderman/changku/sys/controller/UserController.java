@@ -43,32 +43,21 @@ public class UserController {
      * @return
      */
     @GetMapping("/saveUserRoles")
-    public ResultObj saveUserRoles(@RequestParam(name = "userIdAndRole",required = true) String userIdAndRole){
-        Integer userId= null;
+    public ResultObj saveUserRoles(Integer uid,Integer[] ids){
         try {
-            if(userIdAndRole.contains("-")){
-                Map<String,Object> roleMap=new HashMap<>();
-                List<Integer> rids=new ArrayList<>();
-                String userIdstr = userIdAndRole.split("-")[0];
-                userId=Integer.parseInt(userIdstr);
-                //解析UID
-                String substring = userIdAndRole.substring(userIdstr.length() + 1, userIdAndRole.length()-userIdstr.length() + 1);
-                String[] ps = substring.split("-");
-                for (String id : ps) {
-                    rids.add(Integer.parseInt(id));
-                }
-                roleMap.put("userId",userId) ;
-                roleMap.put("rids",rids);
-                userService.saveUserRoles(roleMap);
+            if(ids!=null&&ids.length!=0){
+                Map<String,Object> map=new HashMap<>();
+                map.put("userId",uid);
+                map.put("rids",Arrays.asList(ids));
+                userService.saveUserRoles(map);
             }else {
-                //清除用户的角色
-                userService.cleanUserRoles(Integer.parseInt(userIdAndRole));
+                userService.cleanUserRoles(uid);
             }
-            return ResultObj.ROLE_SUCCESS;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResultObj.ROLE_ERROR;
+            return ResultObj.PERMISSION_SUCCESS;
+        }catch (Exception e){
+            return ResultObj.PERMISSION_ERROR;
         }
+
     }
 
     /**

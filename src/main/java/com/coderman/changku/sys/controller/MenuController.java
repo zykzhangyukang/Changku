@@ -4,8 +4,10 @@ import com.coderman.changku.sys.commons.*;
 import com.coderman.changku.sys.entities.ResultObj;
 import com.coderman.changku.sys.modal.Permission;
 import com.coderman.changku.sys.modal.Permission;
+import com.coderman.changku.sys.modal.Role;
 import com.coderman.changku.sys.modal.User;
 import com.coderman.changku.sys.service.PermissionService;
+import com.coderman.changku.sys.service.RoleService;
 import com.coderman.changku.sys.vo.PermissionVo;
 import com.coderman.changku.sys.vo.PermissionVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,9 @@ public class MenuController {
     @Autowired
     private PermissionService permissionService;
 
+    @Autowired
+    private RoleService roleService;
+
     @GetMapping("/loadIndexLeftMenu")
     public Result loadIndexLeftMenu(PermissionVo permissionVo){
         List<Permission> menus;
@@ -33,7 +38,9 @@ public class MenuController {
              menus=permissionService.findMenu();
         }else {
             //普通用户根据用户id，角色，权限查询。
-            menus=permissionService.findMenu();
+            List<Integer> currentUserRoleIds=roleService.findRoleIdsByUserId(user.getId());
+            //根据角色Id查询用户拥有的权限
+            menus=permissionService.findMenuByRids(currentUserRoleIds);
         }
         //处理list，返回List<TreeNode>
         List<TreeNode> treeNodes=new ArrayList<>();

@@ -7,6 +7,7 @@ import com.coderman.changku.sys.entities.ResultObj;
 import com.coderman.changku.sys.modal.User;
 import com.coderman.changku.sys.service.UserService;
 import com.coderman.changku.sys.vo.UserVo;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +29,7 @@ public class UserController {
      * @param uid
      * @return
      */
+    @RequiresPermissions({"user:resetPwd"})
     @PostMapping("/resetPwd")
     public ResultObj resetPws(Integer uid){
         try {
@@ -42,6 +44,7 @@ public class UserController {
      * 给用户分配角色
      * @return
      */
+    @RequiresPermissions({"user:saveUserRoles"})
     @GetMapping("/saveUserRoles")
     public ResultObj saveUserRoles(Integer uid,Integer[] ids){
         try {
@@ -53,9 +56,9 @@ public class UserController {
             }else {
                 userService.cleanUserRoles(uid);
             }
-            return ResultObj.PERMISSION_SUCCESS;
+            return ResultObj.ROLE_SUCCESS;
         }catch (Exception e){
-            return ResultObj.PERMISSION_ERROR;
+            return ResultObj.ROLE_ERROR;
         }
 
     }
@@ -85,6 +88,7 @@ public class UserController {
      * @param id
      * @return
      */
+    @RequiresPermissions({"user:delete"})
     @PostMapping("/delete")
     public ResultObj delete(Integer id){
         try {
@@ -101,6 +105,7 @@ public class UserController {
      * @param user
      * @return
      */
+    @RequiresPermissions({"user:update"})
     @PostMapping("/update")
     public ResultObj update(User user){
         try {
@@ -117,6 +122,7 @@ public class UserController {
      * @param user
      * @return
      */
+    @RequiresPermissions({"user:add"})
     @PostMapping("/add")
     public ResultObj add(User user){
         try {

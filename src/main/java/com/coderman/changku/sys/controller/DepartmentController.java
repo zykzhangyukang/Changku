@@ -8,6 +8,7 @@ import com.coderman.changku.sys.entities.ResultObj;
 import com.coderman.changku.sys.modal.Department;
 import com.coderman.changku.sys.service.DepartmentService;
 import com.coderman.changku.sys.vo.DepartmentVo;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -59,6 +60,7 @@ public class DepartmentController {
      * @param department
      * @return
      */
+    @RequiresPermissions({"dept:add"})
     @PostMapping("/add")
     public ResultObj add(Department department){
         try {
@@ -75,6 +77,7 @@ public class DepartmentController {
      * @param department
      * @return
      */
+    @RequiresPermissions({"dept:upadate"})
     @PostMapping("/update")
     public ResultObj update(Department department){
         try {
@@ -90,6 +93,7 @@ public class DepartmentController {
      * @param id
      * @return
      */
+    @RequiresPermissions({"dept:delete"})
     @PostMapping("/delete")
     public ResultObj delete(Integer id){
         try {

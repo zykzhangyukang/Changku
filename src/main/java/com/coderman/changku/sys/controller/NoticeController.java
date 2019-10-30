@@ -8,6 +8,7 @@ import com.coderman.changku.sys.modal.Notice;
 import com.coderman.changku.sys.modal.User;
 import com.coderman.changku.sys.service.NoticeService;
 import com.coderman.changku.sys.vo.NoticeVo;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +31,7 @@ public class NoticeController {
      * @param notice
      * @return
      */
+    @RequiresPermissions({"notice:update"})
     @PostMapping("/update")
     public ResultObj update(Notice notice){
         try {
@@ -45,6 +47,7 @@ public class NoticeController {
      * @param notice
      * @return
      */
+    @RequiresPermissions({"notice:add"})
     @PostMapping("/add")
     public ResultObj add(Notice notice){
         try {
@@ -76,6 +79,7 @@ public class NoticeController {
      * 批量删除删除
      * @return
      */
+    @RequiresPermissions({"notice:batchDelete"})
     @PostMapping("/batchDelete")
     public ResultObj batchDelete(String ids){
         List<Integer> list=new ArrayList<>();
@@ -100,6 +104,7 @@ public class NoticeController {
      * @param id
      * @return
      */
+    @RequiresPermissions({"notice:delete"})
     @PostMapping("/delete")
     public ResultObj deleteLoginfo(Integer id){
         try {

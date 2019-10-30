@@ -7,14 +7,12 @@ import com.coderman.changku.sys.entities.ResultObj;
 import com.coderman.changku.sys.modal.Role;
 import com.coderman.changku.sys.service.RoleService;
 import com.coderman.changku.sys.vo.RoleVo;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 角色管理
@@ -28,36 +26,25 @@ public class RoleController {
 
     /**
      * 给角色分配权限
-     * @param roleAndPermission
      * @return
      */
+    @RequiresPermissions({"role:saveRolePermission"})
     @PostMapping("/saveRolePermission")
-    public ResultObj saveRolePermission(@RequestParam(name = "roleAndPermission", required = true) String roleAndPermission){
-        Integer roleId= null;
+    public ResultObj saveRolePermission(Integer rid,Integer[] pids){
         try {
-            if(roleAndPermission.contains("-")){
-                Map<String,Object> roleMap=new HashMap<>();
-                List<Integer> pids=new ArrayList<>();
-                String roleIdstr = roleAndPermission.split("-")[0];
-                roleId=Integer.parseInt(roleIdstr);
-                //解析pid
-                String substring = roleAndPermission.substring(roleIdstr.length() + 1, roleAndPermission.length()-roleIdstr.length() + 1);
-                String[] ps = substring.split("-");
-                for (String id : ps) {
-                    pids.add(Integer.parseInt(id));
-                }
-                roleMap.put("roleId",roleId) ;
-                roleMap.put("pids",pids);
-                roleService.saveRolePermission(roleMap);
+            if(pids!=null&&pids.length!=0){
+                Map<String,Object> map=new HashMap<>();
+                map.put("rid",rid);
+                map.put("pids", Arrays.asList(pids));
+                roleService.saveRolePermission(map);
             }else {
-                //清除角色拥有的所有的权限(没有permission)
-                roleService.cleanRolePermission(Integer.parseInt(roleAndPermission));
+                roleService.cleanRolePermission(rid);
             }
             return ResultObj.PERMISSION_SUCCESS;
-        } catch (Exception e) {
-            e.printStackTrace();
+        }catch (Exception e){
             return ResultObj.PERMISSION_ERROR;
         }
+
     }
 
     /**
@@ -89,6 +76,7 @@ public class RoleController {
      * 添加角色的信息
      * @return
      */
+    @RequiresPermissions({"role:add"})
     @PostMapping("/add")
     public ResultObj add(Role role){
         role.setCreatetime(new Date(System.currentTimeMillis()));
@@ -105,6 +93,7 @@ public class RoleController {
      * @param id
      * @return
      */
+    @RequiresPermissions({"role:delete"})
     @PostMapping("/delete")
     public ResultObj delete(Integer id){
         try {
@@ -120,6 +109,7 @@ public class RoleController {
      * @param role
      * @return
      */
+    @RequiresPermissions({"role:update"})
     @PostMapping("/update")
     public ResultObj update(Role role){
         try {

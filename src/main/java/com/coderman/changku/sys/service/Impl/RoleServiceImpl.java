@@ -122,12 +122,12 @@ public class RoleServiceImpl implements RoleService {
     @Transactional
     @Override
     public void saveRolePermission(Map<String, Object> roleMap) {
-        if(roleMap.get("roleId")!=null&&roleMap.get("pids")!=null){
-            cleanRolePermission((Integer) roleMap.get("roleId"));
+        if(roleMap.get("rid")!=null&&roleMap.get("pids")!=null){
+            cleanRolePermission((Integer) roleMap.get("rid"));
             List<Integer> pids= (List<Integer>) roleMap.get("pids");
             for (Integer pid : pids) {
                 RolePermissionKey rolePermissionKey = new RolePermissionKey();
-                rolePermissionKey.setRid((Integer) roleMap.get("roleId"));
+                rolePermissionKey.setRid((Integer) roleMap.get("rid"));
                 rolePermissionKey.setPid(pid);
                 rolePermissionMapper.insertSelective(rolePermissionKey);
             }
@@ -156,5 +156,22 @@ public class RoleServiceImpl implements RoleService {
         }else {
             return new ArrayList<>();
         }
+    }
+
+    @Override
+    public List<String> findNameByIds(List<Integer> currentUserRoleIds) {
+        List<String> rNames=new ArrayList<>();
+        RoleExample example = new RoleExample();
+        if(currentUserRoleIds!=null&&currentUserRoleIds.size()>0){
+            example.createCriteria().andIdIn(currentUserRoleIds);
+        }
+        List<Role> roles = roleMapper.selectByExample(example);
+
+        if(roles.size()>0){
+            for (Role role : roles) {
+                rNames.add(role.getName());
+            }
+        }
+        return rNames;
     }
 }

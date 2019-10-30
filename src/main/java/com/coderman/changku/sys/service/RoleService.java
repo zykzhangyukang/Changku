@@ -61,4 +61,11 @@ public interface RoleService {
      * @return
      */
     List<Integer> findRoleIdsByUserId(Integer id);
+
+    /**
+     * 根据角色集合返回角色的名称
+     * @param currentUserRoleIds
+     * @return
+     */
+    List<String> findNameByIds(List<Integer> currentUserRoleIds);
 }

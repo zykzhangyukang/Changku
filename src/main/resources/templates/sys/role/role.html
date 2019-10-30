@@ -191,15 +191,17 @@
                 yes: function(index, layero){
                     //得到树选中的所有节点
                     var permissionData = dtree.getCheckbarNodesParam("RolePermissionTree");
-                    var params=data.id;//角色的id
+                    var params="rid="+data.id;//角色的id
                     $.each(permissionData,function(index,item){
-                        params+="-"+item.nodeId;
+                        params+="&pids="+item.nodeId;
                     });
-                    $.post("/role/saveRolePermission",{"roleAndPermission":params},function(res){
+                    $.post("/role/saveRolePermission",params,function(res){
                         if(res.code==200){
-
                         layer.msg(res.msg);
                         layer.close(selectPermissionDiv);
+                        }else{
+                            layer.msg(res.msg);
+                            layer.close(selectPermissionDiv);
                         }
                     })
                 },

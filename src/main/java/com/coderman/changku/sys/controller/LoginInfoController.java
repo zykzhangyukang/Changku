@@ -6,6 +6,7 @@ import com.coderman.changku.sys.entities.ResultObj;
 import com.coderman.changku.sys.modal.LoginInfo;
 import com.coderman.changku.sys.service.LoginInfoService;
 import com.coderman.changku.sys.vo.LoginInfoVo;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,6 +39,7 @@ public class LoginInfoController {
      * 批量删除删除
      * @return
      */
+    @RequiresPermissions({"loginInfo:batchDelete"})
     @PostMapping("/batchDelete")
     public ResultObj batchDelete(String ids){
         List<Integer> list=new ArrayList<>();
@@ -62,6 +64,7 @@ public class LoginInfoController {
      * @param id
      * @return
      */
+    @RequiresPermissions({"loginInfo:delete"})
     @PostMapping("/delete")
     public ResultObj deleteLoginfo(Integer id){
         try {

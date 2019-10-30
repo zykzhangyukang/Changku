@@ -8,6 +8,7 @@ import com.coderman.changku.sys.entities.ResultObj;
 import com.coderman.changku.sys.modal.Permission;
 import com.coderman.changku.sys.service.PermissionService;
 import com.coderman.changku.sys.vo.PermissionVo;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,6 +43,7 @@ public class PermissionController {
      * @param Permission
      * @return
      */
+    @RequiresPermissions({"permission:add"})
     @PostMapping("/add")
     public ResultObj add(Permission Permission){
         try {
@@ -58,6 +60,7 @@ public class PermissionController {
      * @param Permission
      * @return
      */
+    @RequiresPermissions({"permission:update"})
     @PostMapping("/update")
     public ResultObj update(Permission Permission){
         try {
@@ -73,6 +76,7 @@ public class PermissionController {
      * @param id
      * @return
      */
+    @RequiresPermissions({"permission:delete"})
     @PostMapping("/delete")
     public ResultObj delete(Integer id){
         try {

@@ -81,9 +81,11 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    public List<Permission> findMenuByRids(List<Integer> currentUserRoleIds) {
+    public List<Permission> findMenuByRids(List<Integer> currentUserRoleIds,String type) {
         RolePermissionExample example = new RolePermissionExample();
-        example.createCriteria().andRidIn(currentUserRoleIds);
+        if(currentUserRoleIds.size()>0){
+            example.createCriteria().andRidIn(currentUserRoleIds);
+        }
         List<RolePermissionKey> rolePermissionKeyList = rolePermissionMapper.selectByExample(example);
         Set<Integer> set=null;
         if(rolePermissionKeyList.size()>0){
@@ -94,7 +96,7 @@ public class PermissionServiceImpl implements PermissionService {
             }
         }
         PermissionExample example1 = new PermissionExample();
-        example1.createCriteria().andTypeEqualTo(Constast.MENU_TYPE).andIdIn(new ArrayList<>(set));
+        example1.createCriteria().andTypeEqualTo(type).andIdIn(new ArrayList<>(set));
         List<Permission> permissions = permissionMapper.selectByExample(example1);
         return permissions;
     }

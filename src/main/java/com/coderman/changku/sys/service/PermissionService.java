@@ -66,5 +66,5 @@ public interface PermissionService {
      * @param currentUserRoleIds
      * @return
      */
-    List<Permission> findMenuByRids(List<Integer> currentUserRoleIds);
+    List<Permission> findMenuByRids(List<Integer> currentUserRoleIds,String type);
 }

@@ -10,6 +10,7 @@ import com.coderman.changku.sys.service.PermissionService;
 import com.coderman.changku.sys.service.RoleService;
 import com.coderman.changku.sys.vo.PermissionVo;
 import com.coderman.changku.sys.vo.PermissionVo;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,8 +40,9 @@ public class MenuController {
         }else {
             //普通用户根据用户id，角色，权限查询。
             List<Integer> currentUserRoleIds=roleService.findRoleIdsByUserId(user.getId());
-            //根据角色Id查询用户拥有的权限
-            menus=permissionService.findMenuByRids(currentUserRoleIds);
+            //根据角色Id查询用户拥有的菜单
+            menus=permissionService.findMenuByRids(currentUserRoleIds,Constast.MENU_TYPE);
+
         }
         //处理list，返回List<TreeNode>
         List<TreeNode> treeNodes=new ArrayList<>();
@@ -77,6 +79,7 @@ public class MenuController {
      * @param Permission
      * @return
      */
+    @RequiresPermissions({"menu:add"})
     @PostMapping("/add")
     public ResultObj add(Permission Permission){
         try {
@@ -93,6 +96,7 @@ public class MenuController {
      * @param Permission
      * @return
      */
+    @RequiresPermissions({"menu:update"})
     @PostMapping("/update")
     public ResultObj update(Permission Permission){
         try {
@@ -108,6 +112,7 @@ public class MenuController {
      * @param id
      * @return
      */
+    @RequiresPermissions({"menu:delete"})
     @PostMapping("/delete")
     public ResultObj delete(Integer id){
         try {

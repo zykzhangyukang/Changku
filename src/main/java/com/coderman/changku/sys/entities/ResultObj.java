@@ -34,6 +34,9 @@ public class ResultObj {
     public static final ResultObj RESET_ERROR = new ResultObj(Constast.OK,"重置密码失败");
 
 
+    public static final ResultObj NOT_HAVE_PERMISSION = new ResultObj(Constast.ERROR,"对不起，您没有权限操作");
+
+
     private Integer code;
     private String msg;
 

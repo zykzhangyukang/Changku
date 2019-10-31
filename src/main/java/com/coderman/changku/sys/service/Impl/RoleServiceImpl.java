@@ -11,11 +11,9 @@ import com.coderman.changku.sys.modal.*;
 import com.coderman.changku.sys.service.RoleService;
 import com.coderman.changku.sys.vo.RoleVo;
 import com.github.pagehelper.PageHelper;
-import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sun.reflect.generics.tree.Tree;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +40,7 @@ public class RoleServiceImpl implements RoleService {
         RoleExample roleExample = createRoleExample(roleVo);
         List<Role> roles = roleMapper.selectByExample(roleExample);
         com.github.pagehelper.Page<Role> rolePage= (com.github.pagehelper.Page<Role>) roles;
-        return new Page<>(rolePage.getTotal(),rolePage.getResult());
+        return new Page<>(rolePage.getTotal(), rolePage.getResult());
     }
 
     /**
@@ -148,7 +146,7 @@ public class RoleServiceImpl implements RoleService {
         example.createCriteria().andUidEqualTo(id);
         List<RoleUserKey> roleUserKeys = roleUserMapper.selectByExample(example);
         if(roleUserKeys.size()>0){
-            List<Integer> rids=new ArrayList<>();
+            List<Integer> rids= new ArrayList<>();
             for (RoleUserKey roleUserKey : roleUserKeys) {
                 rids.add(roleUserKey.getRid());
             }
@@ -160,7 +158,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public List<String> findNameByIds(List<Integer> currentUserRoleIds) {
-        List<String> rNames=new ArrayList<>();
+        List<String> rNames= new ArrayList<>();
         RoleExample example = new RoleExample();
         if(currentUserRoleIds!=null&&currentUserRoleIds.size()>0){
             example.createCriteria().andIdIn(currentUserRoleIds);

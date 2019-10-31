@@ -35,6 +35,11 @@ public class ResultObj {
 
 
     public static final ResultObj NOT_HAVE_PERMISSION = new ResultObj(Constast.ERROR,"对不起，您没有权限操作");
+    /**
+     * fileUpload
+     */
+    public static final ResultObj UPLOAD_SUCCESS = new ResultObj(Constast.OK,"上传成功");
+    public static final ResultObj UPLOAD_ERROR = new ResultObj(Constast.OK,"上传失败");
 
 
     private Integer code;

@@ -30,6 +30,7 @@ public class PermissionServiceImpl implements PermissionService {
     @Override
     public List<Permission> findMenu() {
         PermissionExample example = new PermissionExample();
+        example.setOrderByClause("ordernum asc");
         example.createCriteria().andTypeEqualTo(Constast.MENU_TYPE).andAvailableEqualTo(Constast.AVAILABLE_TRUE);
         return permissionMapper.selectByExample(example);
     }
@@ -96,6 +97,7 @@ public class PermissionServiceImpl implements PermissionService {
             }
         }
         PermissionExample example1 = new PermissionExample();
+        example1.setOrderByClause("ordernum asc");
         example1.createCriteria().andTypeEqualTo(type).andIdIn(new ArrayList<>(set));
         List<Permission> permissions = permissionMapper.selectByExample(example1);
         return permissions;

@@ -35,7 +35,7 @@ public interface Constast {
     /**
      * 用户的默认密码
      */
-    Object DEFAULT_PASSWORD = "zhangyukang";
+    Object DEFAULT_PASSWORD = "123456";
     /**
      * 加密的次数
      */

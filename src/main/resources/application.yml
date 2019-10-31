@@ -31,6 +31,7 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+
 #配置mybatisplus
 mybatis:
   #实体类所做包
@@ -38,7 +39,7 @@ mybatis:
   #mapper.xml所在位置
   mapper-locations: classpath:mapper/*/*Mapper.xml
 
-    
+
 #shiro的配置
 shiro:
   hash-algorithm-name: md5

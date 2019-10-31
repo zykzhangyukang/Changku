@@ -49,7 +49,7 @@ public class LoginController {
             //根据Ip获取用户的登入地点。
             try {
                 loginInfo.setAddress(
-                        AddressUtils.getAddress("ip="+WebUtil.getRequest().getRemoteAddr().toString(), "utf-8")
+                    AddressUtils.getAddress("ip="+WebUtil.getRequest().getRemoteAddr().toString(), "utf-8")
                 );
             } catch (Exception e) {
                 loginInfo.setAddress(Constast.IP_ADDRESS);

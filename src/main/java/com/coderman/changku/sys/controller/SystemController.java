@@ -11,6 +11,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/sys")
 public class SystemController {
 
+
+    /**
+     * 跳转到图片管理
+     * @return
+     */
+    @GetMapping("/toImageManager")
+    public String toImageManager(){
+        return "/sys/file/images";
+    }
+
     /**
      * 跳转到用户管理页面左边
      * @return

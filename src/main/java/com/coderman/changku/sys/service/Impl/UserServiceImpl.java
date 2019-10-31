@@ -20,8 +20,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
 
-    @Autowired
-    private DepartmentMapper departmentMapper;
+
 
     @Autowired
     private RoleUserMapper roleUserMapper;

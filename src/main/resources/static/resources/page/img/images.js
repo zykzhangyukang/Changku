@@ -12,7 +12,7 @@ layui.config({
     flow.load({
         elem: '#Images', //流加载容器
         done: function(page, next){ //加载下一页
-            $.get("../../json/images.json",function(res){
+            $.get("/file/loadImagesJson",function(res){
                 //模拟插入
                 var imgList = [],data = res.data;
                 var maxPage = imgNums*page < data.length ? imgNums*page : data.length;
@@ -35,7 +35,7 @@ layui.config({
     //多图片上传
     upload.render({
         elem: '.uploadNewImg',
-        url: '../../json/userface.json',
+        url: '/file/upload',
         multiple: true,
         before: function(obj){
             //预读本地文件示例，不支持ie8
@@ -48,6 +48,8 @@ layui.config({
         },
         done: function(res){
             //上传完毕
+            console.log(res)
+            layer.alert("上传成功");
         }
     });
 

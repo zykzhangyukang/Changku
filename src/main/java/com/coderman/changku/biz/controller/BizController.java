@@ -16,6 +16,6 @@ public class BizController {
      */
     @GetMapping("/toCustomerManager")
     public String toCustomerManager(){
-        return "/biz/customer/customer";
+        return "biz/customer/customer";
     }
 }

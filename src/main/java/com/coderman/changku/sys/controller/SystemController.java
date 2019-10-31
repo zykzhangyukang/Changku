@@ -18,7 +18,7 @@ public class SystemController {
      */
     @GetMapping("/toImageManager")
     public String toImageManager(){
-        return "/sys/file/images";
+        return "sys/file/images";
     }
 
     /**

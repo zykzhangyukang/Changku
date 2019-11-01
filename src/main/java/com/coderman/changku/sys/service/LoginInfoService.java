@@ -6,6 +6,7 @@ import com.coderman.changku.sys.modal.User;
 import com.coderman.changku.sys.vo.LoginInfoVo;
 
 import java.util.List;
+import java.util.Map;
 
 public interface LoginInfoService {
 
@@ -36,4 +37,11 @@ public interface LoginInfoService {
      * @param loginInfo
      */
     void save(LoginInfo loginInfo);
+
+    /**
+     * 查询用户近期访问记录
+     * @param user
+     * @return
+     */
+    List<Map<String,Object>> findLastSevenDaysVisitCount(User user);
 }

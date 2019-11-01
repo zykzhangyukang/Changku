@@ -3,6 +3,9 @@ package com.coderman.changku.sys.mapper;
 import com.coderman.changku.sys.modal.LoginInfo;
 import com.coderman.changku.sys.modal.LoginInfoExample;
 import java.util.List;
+import java.util.Map;
+
+import com.coderman.changku.sys.modal.User;
 import org.apache.ibatis.annotations.Param;
 
 public interface LoginInfoMapper {
@@ -27,4 +30,6 @@ public interface LoginInfoMapper {
     int updateByPrimaryKeySelective(LoginInfo record);
 
     int updateByPrimaryKey(LoginInfo record);
+
+    List<Map<String,Object>> findLastSevenDaysVisitCount(User user);
 }

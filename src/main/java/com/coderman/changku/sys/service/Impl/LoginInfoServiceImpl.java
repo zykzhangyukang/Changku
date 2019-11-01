@@ -4,6 +4,7 @@ import com.coderman.changku.sys.commons.Page;
 import com.coderman.changku.sys.mapper.LoginInfoMapper;
 import com.coderman.changku.sys.modal.LoginInfo;
 import com.coderman.changku.sys.modal.LoginInfoExample;
+import com.coderman.changku.sys.modal.User;
 import com.coderman.changku.sys.service.LoginInfoService;
 import com.coderman.changku.sys.vo.LoginInfoVo;
 import com.github.pagehelper.PageHelper;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class LoginInfoServiceImpl implements LoginInfoService {
@@ -43,6 +45,11 @@ public class LoginInfoServiceImpl implements LoginInfoService {
     @Override
     public void save(LoginInfo loginInfo) {
         loginInfoMapper.insertSelective(loginInfo);
+    }
+
+    @Override
+    public List<Map<String, Object>> findLastSevenDaysVisitCount(User user) {
+        return loginInfoMapper.findLastSevenDaysVisitCount(user);
     }
 
     /**

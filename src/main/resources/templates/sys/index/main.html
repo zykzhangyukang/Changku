@@ -20,14 +20,7 @@
 
 	<div class="layui-row layui-col-space10">
 		<div class="layui-col-lg6 layui-col-md12">
-			<blockquote class="layui-elem-quote title">最新文章 <i class="layui-icon layui-red">&#xe756;</i></blockquote>
-			<table class="layui-table mag0" lay-skin="line">
-				<colgroup>
-					<col>
-					<col width="110">
-				</colgroup>
-				<tbody class="hot_news"></tbody>
-			</table>
+            <div id="main2" style="width: 600px;height:400px;"></div>
 		</div>
 		<div class="layui-col-lg6 layui-col-md12">
 			<!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
@@ -40,6 +33,7 @@
 	<script type="text/javascript">
         layui.use(['jquery'],function(){
             var myChart = echarts.init(document.getElementById('main'));
+            var myChart2 = echarts.init(document.getElementById('main2'));
             var $=layui.jquery;
             // 显示标题，图例和空的坐标轴
             myChart.setOption({
@@ -52,6 +46,40 @@
                 color: ['#3398DB'],
                 title: {
                     text: '系统访问记录'
+                },
+                tooltip: {},
+                legend: {
+                    data:['销量']
+                },
+                stroke: {
+                    show: true,
+                    width: 1,
+                    colors: ['transparent']
+                },
+                xAxis: {
+                    data: ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
+                },
+                yAxis : [
+                    {
+                        type : 'value'
+                    }
+                ],
+                series: [{
+                    name: '销量',
+                    type: 'bar',
+                    data: []
+                }]
+            });
+            myChart2.setOption({
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                color: ['#3398DB'],
+                title: {
+                    text: '访问趋势'
                 },
                 tooltip: {},
                 legend: {
@@ -94,6 +122,18 @@
                         // 根据名字对应到相应的系列
                         name:'直接访问',
                         type:'bar',
+                        data: mydata,
+                    }]
+                });
+                myChart2.setOption({
+                    xAxis: {
+                        type: 'category',
+                        data: mycategories
+                    },
+                    series: [{
+                        // 根据名字对应到相应的系列
+                        name:'访问趋势',
+                        type: 'line',
                         data: mydata,
                     }]
                 });

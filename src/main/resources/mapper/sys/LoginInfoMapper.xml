@@ -220,7 +220,7 @@
     from
     sys_login_info
     where
-    date_sub(curdate(), interval 10 day) &lt;= date(logintime)
+    date_sub(curdate(), interval 20 day) &lt;= date(logintime)
     ) as l where 1 = 1
     <if test="name != null and name != ''">
       and l.loginname = #{name}

@@ -31,7 +31,6 @@ public class ViewController {
     public ResultJson loadViewCount(){
         Map<String, Object> data = new HashMap<>();
         User user = (User) WebUtil.getSession().getAttribute("user");
-        List<Map<String,Object>> maps=loginInfoService.findLastSevenDaysVisitCount(user);
         List<Map<String, Object>> lastSevenVisitCount = this.loginInfoService.findLastSevenDaysVisitCount(null);
         data.put("lastSevenVisitCount", lastSevenVisitCount);
         return new ResultJson(data);

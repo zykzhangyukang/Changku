@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.coderman.changku.biz.mapper.ProviderMapper" >
+  <resultMap id="BaseResultMap" type="com.coderman.changku.biz.modal.Provider" >
+    <id column="fID" property="fid" jdbcType="VARCHAR" />
+    <result column="MerchantNo" property="merchantno" jdbcType="INTEGER" />
+    <result column="MerchantName" property="merchantname" jdbcType="VARCHAR" />
+    <result column="MerchantTell" property="merchanttell" jdbcType="VARCHAR" />
+    <result column="Merchantperson" property="merchantperson" jdbcType="VARCHAR" />
+    <result column="sh" property="sh" jdbcType="VARCHAR" />
+    <result column="bank" property="bank" jdbcType="VARCHAR" />
+    <result column="bankcard" property="bankcard" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="addtime" property="addtime" jdbcType="VARCHAR" />
+    <result column="operator" property="operator" jdbcType="VARCHAR" />
+    <result column="version" property="version" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    fID, MerchantNo, MerchantName, MerchantTell, Merchantperson, sh, bank, bankcard, 
+    address, addtime, operator, version
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.coderman.changku.biz.modal.ProviderExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from oa_supply_bususiness
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from oa_supply_bususiness
+    where fID = #{fid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from oa_supply_bususiness
+    where fID = #{fid,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.coderman.changku.biz.modal.ProviderExample" >
+    delete from oa_supply_bususiness
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.coderman.changku.biz.modal.Provider" >
+    insert into oa_supply_bususiness (fID, MerchantNo, MerchantName, 
+      MerchantTell, Merchantperson, sh, 
+      bank, bankcard, address, 
+      addtime, operator, version
+      )
+    values (#{fid,jdbcType=VARCHAR}, #{merchantno,jdbcType=INTEGER}, #{merchantname,jdbcType=VARCHAR}, 
+      #{merchanttell,jdbcType=VARCHAR}, #{merchantperson,jdbcType=VARCHAR}, #{sh,jdbcType=VARCHAR}, 
+      #{bank,jdbcType=VARCHAR}, #{bankcard,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+      #{addtime,jdbcType=VARCHAR}, #{operator,jdbcType=VARCHAR}, #{version,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.coderman.changku.biz.modal.Provider" >
+    insert into oa_supply_bususiness
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="fid != null" >
+        fID,
+      </if>
+      <if test="merchantno != null" >
+        MerchantNo,
+      </if>
+      <if test="merchantname != null" >
+        MerchantName,
+      </if>
+      <if test="merchanttell != null" >
+        MerchantTell,
+      </if>
+      <if test="merchantperson != null" >
+        Merchantperson,
+      </if>
+      <if test="sh != null" >
+        sh,
+      </if>
+      <if test="bank != null" >
+        bank,
+      </if>
+      <if test="bankcard != null" >
+        bankcard,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="addtime != null" >
+        addtime,
+      </if>
+      <if test="operator != null" >
+        operator,
+      </if>
+      <if test="version != null" >
+        version,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="fid != null" >
+        #{fid,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantno != null" >
+        #{merchantno,jdbcType=INTEGER},
+      </if>
+      <if test="merchantname != null" >
+        #{merchantname,jdbcType=VARCHAR},
+      </if>
+      <if test="merchanttell != null" >
+        #{merchanttell,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantperson != null" >
+        #{merchantperson,jdbcType=VARCHAR},
+      </if>
+      <if test="sh != null" >
+        #{sh,jdbcType=VARCHAR},
+      </if>
+      <if test="bank != null" >
+        #{bank,jdbcType=VARCHAR},
+      </if>
+      <if test="bankcard != null" >
+        #{bankcard,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="addtime != null" >
+        #{addtime,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null" >
+        #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null" >
+        #{version,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.coderman.changku.biz.modal.ProviderExample" resultType="java.lang.Integer" >
+    select count(*) from oa_supply_bususiness
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update oa_supply_bususiness
+    <set >
+      <if test="record.fid != null" >
+        fID = #{record.fid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.merchantno != null" >
+        MerchantNo = #{record.merchantno,jdbcType=INTEGER},
+      </if>
+      <if test="record.merchantname != null" >
+        MerchantName = #{record.merchantname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.merchanttell != null" >
+        MerchantTell = #{record.merchanttell,jdbcType=VARCHAR},
+      </if>
+      <if test="record.merchantperson != null" >
+        Merchantperson = #{record.merchantperson,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sh != null" >
+        sh = #{record.sh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bank != null" >
+        bank = #{record.bank,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bankcard != null" >
+        bankcard = #{record.bankcard,jdbcType=VARCHAR},
+      </if>
+      <if test="record.address != null" >
+        address = #{record.address,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addtime != null" >
+        addtime = #{record.addtime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operator != null" >
+        operator = #{record.operator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.version != null" >
+        version = #{record.version,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update oa_supply_bususiness
+    set fID = #{record.fid,jdbcType=VARCHAR},
+      MerchantNo = #{record.merchantno,jdbcType=INTEGER},
+      MerchantName = #{record.merchantname,jdbcType=VARCHAR},
+      MerchantTell = #{record.merchanttell,jdbcType=VARCHAR},
+      Merchantperson = #{record.merchantperson,jdbcType=VARCHAR},
+      sh = #{record.sh,jdbcType=VARCHAR},
+      bank = #{record.bank,jdbcType=VARCHAR},
+      bankcard = #{record.bankcard,jdbcType=VARCHAR},
+      address = #{record.address,jdbcType=VARCHAR},
+      addtime = #{record.addtime,jdbcType=VARCHAR},
+      operator = #{record.operator,jdbcType=VARCHAR},
+      version = #{record.version,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.coderman.changku.biz.modal.Provider" >
+    update oa_supply_bususiness
+    <set >
+      <if test="merchantno != null" >
+        MerchantNo = #{merchantno,jdbcType=INTEGER},
+      </if>
+      <if test="merchantname != null" >
+        MerchantName = #{merchantname,jdbcType=VARCHAR},
+      </if>
+      <if test="merchanttell != null" >
+        MerchantTell = #{merchanttell,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantperson != null" >
+        Merchantperson = #{merchantperson,jdbcType=VARCHAR},
+      </if>
+      <if test="sh != null" >
+        sh = #{sh,jdbcType=VARCHAR},
+      </if>
+      <if test="bank != null" >
+        bank = #{bank,jdbcType=VARCHAR},
+      </if>
+      <if test="bankcard != null" >
+        bankcard = #{bankcard,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="addtime != null" >
+        addtime = #{addtime,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null" >
+        operator = #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null" >
+        version = #{version,jdbcType=INTEGER},
+      </if>
+    </set>
+    where fID = #{fid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.coderman.changku.biz.modal.Provider" >
+    update oa_supply_bususiness
+    set MerchantNo = #{merchantno,jdbcType=INTEGER},
+      MerchantName = #{merchantname,jdbcType=VARCHAR},
+      MerchantTell = #{merchanttell,jdbcType=VARCHAR},
+      Merchantperson = #{merchantperson,jdbcType=VARCHAR},
+      sh = #{sh,jdbcType=VARCHAR},
+      bank = #{bank,jdbcType=VARCHAR},
+      bankcard = #{bankcard,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      addtime = #{addtime,jdbcType=VARCHAR},
+      operator = #{operator,jdbcType=VARCHAR},
+      version = #{version,jdbcType=INTEGER}
+    where fID = #{fid,jdbcType=VARCHAR}
+  </update>
+</mapper>

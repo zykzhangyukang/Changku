@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>供应商管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" href="/resources/layui/css/layui.css" media="all" />
+    <link rel="stylesheet" href="/resources/css/public.css" media="all" />
+</head>
+<body class="childrenBody">
+<!--查询条件开始-->
+<blockquote class="layui-elem-quote">
+    <form class="layui-form" action="" id="providerForm" method="post">
+        <span>供应商姓名:</span>&nbsp;
+        <div class="layui-inline">
+            <input class="layui-input" name="providername" id="providername" placeholder="供应商姓名" autocomplete="off">
+        </div>&nbsp;
+        <span>地址:</span>
+        <div class="layui-inline">
+            <input class="layui-input" name="address" id="address" placeholder="地址" autocomplete="off">
+        </div>&nbsp;
+        <span>车辆品牌:</span>
+        <div class="layui-inline">
+            <input class="layui-input" name="carpinpai" id="carpinpai" placeholder="车辆品牌" autocomplete="off">
+        </div>&nbsp;
+
+        <button type="button" class="layui-btn layui-btn-normal"  lay-submit="" lay-filter="doSearch"><span class="layui-icon layui-icon-search"></span>搜索</button></legend>
+        <button type="reset" class="layui-btn layui-btn-warm" ><span class="layui-icon layui-icon-refresh"></span>重置</button></legend>
+    </form>
+</blockquote>
+<!--查询条件结束-->
+
+<!--数据表格开始-->
+<table class="layui-hide" id="providerTable" lay-filter="providerTable">
+</table>
+<!--数据表格结束-->
+
+<!--单行操作工具栏--->
+<div id="providerRowBar" style="display: none;">
+    <button    type="button" lay-event="edit"  class="layui-btn   layui-btn-xs"><span class="layui-icon layui-icon-edit"></span>修改</button>
+    <button    type="button" lay-event="delete"  class="layui-btn layui-btn-xs layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>删除</button>
+</div>
+<!-- 添加和修改的弹出层开始 -->
+<div style="display: none;padding: 10px" id="addOrUpdateModal">
+    <form action="" method="post" class="layui-form layui-form-pane" id="dataFrm" lay-filter="dataFrm">
+        <div class="layui-form-item">
+            <label class="layui-form-label">供应商姓名</label>
+            <div class="layui-input-inline">
+                <input type="hidden" name="id" id="key">
+                <input type="text"  name="merchantname" lay-verify="required" autocomplete="off" placeholder="请输入标题" class="layui-input">
+            </div>
+            <label class="layui-form-label">电话号码</label>
+            <div class="layui-input-inline">
+                <input type="text" lay-verify="required" name="merchanttell" placeholder="请输入电话号码" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">供应商地址</label>
+            <div class="layui-input-inline">
+                <input type="text" lay-verify="required" name="address" placeholder="请输入供应商地址" autocomplete="off" class="layui-input">
+            </div>
+            <label class="layui-form-label">税号</label>
+            <div class="layui-input-inline">
+                <input type="text" name="sh" placeholder="请输入税号" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">开户银行</label>
+            <div class="layui-input-inline">
+                <input type="text" lay-verify="required" name="bank" placeholder="请输入供应商银行" autocomplete="off" class="layui-input">
+            </div>
+            <label class="layui-form-label">银行账号</label>
+            <div class="layui-input-inline">
+                <input type="text" name="bankcard" lay-verify="required"  placeholder="请输入银行账号" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div  class="layui-form-item">
+            <label class="layui-form-label">联系人</label>
+            <div class="layui-input-inline">
+                <input type="text"  name="merchantperson" placeholder="请输入联系人" autocomplete="off" class="layui-input">
+            </div>
+            <label class="layui-form-label">编号</label>
+            <div class="layui-input-inline">
+                <input type="text"  name="merchantno" placeholder="请输入编号" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">版本</label>
+            <div class="layui-input-block">
+                <input type="text"  name="version" placeholder="请输入版本" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button type="button" class="layui-btn"  lay-submit="" lay-filter="doSubmit" id="doSubmit">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+<!-- 添加和修改的弹出层结束 -->
+
+<!--表格顶部工具栏部分--->
+<div id="providerToolBar" style="display: none;">
+    <button type="button"  lay-event="batchDelete"  class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>批量删除</button>
+    <button type="button"  lay-event="add"  class="layui-btn layui-btn-sm layui-btn-warning"><span class="layui-icon layui-icon-add-1"></span>添加</button>
+</div>
+<!--数据表格结束-->
+<script type="text/javascript" src="/resources/layui/layui.js"></script>
+<script type="text/javascript">
+
+    layui.use(['jquery','form','table','layer','laydate'],function () {
+        var $=layui.jquery;
+        var layer=layui.layer;
+        var form=layui.form;
+        var table=layui.table;
+        var laydate=layui.laydate;
+        laydate.render({
+            elem:'#birthday',
+            type:'datetime'
+        });
+        //加载数据
+        var tableIns =table.render({
+            elem: '#providerTable'
+            ,url:'/provider/findPage'
+            ,toolbar: '#providerToolBar' //开启头部工具栏，并为其绑定左侧模板
+            ,title: '供应商数据表'
+            ,height:'full-60'
+            ,page: true
+            ,cols: [ [
+                {type: 'checkbox', fixed: 'left'}
+                ,{field:'merchantno', title:'序号',align:'center',width: 100,sort:'true'}
+                ,{field:'id', title:'id',hide:true,align:'center',width:100 }
+                ,{field:'merchantname', title:'商家名称',align:'center',width: 100,sort:'true'}
+                ,{field:'merchanttell', title:'电话',align:'center',width: 200}
+                ,{field:'addtime', title:'添加时间',align:'center',width: 200}
+                ,{field:'merchantperson', title:'联系人',align:'center',sort:'true',width: 100}
+                ,{field:'bank', title:'开户行',align:'center',sort:'true',width: 100}
+                ,{field:'sh', title:'税号',align:'center',sort:'true',width: 100}
+                ,{field:'bankcard', title:'银行账户',align:'center',sort:'true',width: 100}
+                ,{field:'address', title:'单位地址',align:'center',sort:'true',width: 100}
+                ,{fixed: 'right', title:'操作', toolbar: '#providerRowBar',align:'center',width:200}
+            ] ]
+        });
+        //监听单元格编辑
+        table.on('edit(providerTable)', function(obj){
+            var value = obj.value //得到修改后的值
+                ,data = obj.data //得到所在行所有键值
+                ,field = obj.field; //得到字段
+            //更新
+            $.post("/provider/update",data,function(res){
+                if(res.code==200){
+                    tableIns.reload();
+                    layer.msg(res.msg);
+                }else{
+                    layer.msg(res.msg);
+                }
+            })
+        });
+        //自定义格式
+        laydate.render({
+            elem: '#test11'
+            ,format: 'yyyy年MM月dd日'
+        });
+
+        //模糊查询
+        form.on("submit(doSearch)",function(data){
+            tableIns.reload({
+                where:data.field,
+                page:{
+                    curr:1
+                }
+            });
+            return false;
+        });
+        //监听工具条的事件
+        table.on("toolbar(providerTable)",function(obj){
+            switch(obj.event){
+                case 'batchDelete':
+                    batchDelete();
+                    break;
+                case 'add':
+                    openAddModal();
+                    break;
+            };
+        });
+
+        //监听行工具条的事件
+        table.on("tool(providerTable)",function(obj){
+            var data = obj.data; //获得当前行数据
+            switch(obj.event){
+                case 'delete':
+                    deleteprovider(data);
+                    break;
+                case 'edit':
+                    openUpdateproviderModal(data);
+                    break;
+
+            };
+        });
+        //批量删除
+        function batchDelete() {
+            //得到选中行
+            var checkStatus = table.checkStatus('noticeTable');
+            var dataLength=checkStatus.data.length;
+            if(dataLength>0){
+                layer.confirm('你确定要删除这些数据吗?', {icon: 3, title:'提示'}, function(index){
+                    var data=checkStatus.data; //获取选中行的数据
+                    var ids="";
+                    $.each(data,function(index,item){
+                        ids+=item.id+",";
+                    })
+                    ids=ids.substring(0,ids.length-1);
+                    $.post("/notice/batchDelete",{"ids":ids},function(res){
+                        if(res.code==200){
+                            tableIns.reload();
+                        }
+                        layer.msg(res.msg);
+                    })
+                    layer.close(index);
+                });
+
+            }else{
+                layer.msg("请选中操作行")
+            }
+        }
+        var mainIndex;
+        var url;
+        //打开添加的弹出层
+        function openAddModal(){
+            $("#key").val("");
+            mainIndex=layer.open({
+                type:1,
+                content: $("#addOrUpdateModal"),
+                area:['800px','500px'],
+                title:'添加供应商',
+                success:function(){
+                    $("#dataFrm")[0].reset();
+                    url="/provider/add";
+                }
+            });
+        }
+        //发布供应商
+        form.on("submit(doSubmit)",function (data) {
+            $.post(url,data.field,function(res){
+                if(res.code==200){
+                    tableIns.reload();
+                }
+                layer.msg(res.msg);
+                layer.close(mainIndex);
+            })
+            return false;
+        });
+
+        //点击更新弹出更新框
+        function openUpdateproviderModal(data){
+            mainIndex=layer.open({
+                type:1,
+                content:$("#addOrUpdateModal"),
+                area:['800px','550'],
+                title:'修改供应商',
+                success:function(){
+                    $("#dataFrm")[0].reset();
+                    //装载新的数据
+                    form.val("dataFrm",data);
+                    url="/provider/update";
+                }
+            });
+        }
+
+        //删除单记录
+        function deleteprovider(data){
+            layer.confirm('你确定要删除['+data.providername+']这个供应商吗?', {icon: 3, title:'提示'}, function(index){
+                $.post("/provider/delete",{id:data.id},function(res){
+                    if(res.code==200){
+                        tableIns.reload();
+                    }
+                    layer.msg(res.msg);
+                })
+                layer.close(index);
+            });
+        }
+        //批量删除
+        function batchDelete() {
+            //得到选中行
+            var checkStatus = table.checkStatus('providerTable');
+            var dataLength=checkStatus.data.length;
+            if(dataLength>0){
+                layer.confirm('你确定要删除这些供应商吗?', {icon: 3, title:'提示'}, function(index){
+                    var data=checkStatus.data; //获取选中行的数据
+                    var ids="";
+                    $.each(data,function(index,item){
+                        ids+=item.id+",";
+                    })
+                    ids=ids.substring(0,ids.length-1);
+                    $.post("/provider/batchDelete",{"ids":ids},function(res){
+                        if(res.code==200){
+                            tableIns.reload();
+                        }
+                        layer.msg(res.msg);
+                    })
+                    layer.close(index);
+                });
+
+            }else{
+                layer.msg("请选中操作行")
+            }
+        }
+    });
+</script>
+</body>
+</html>

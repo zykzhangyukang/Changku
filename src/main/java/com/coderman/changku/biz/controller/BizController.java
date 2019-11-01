@@ -13,6 +13,15 @@ public class BizController {
 
 
     /**
+     * 跳转到供应商管理页面
+     * @return
+     */
+    @GetMapping("/toProviderManager")
+    public String toProviderManager(){
+        return "biz/provider/provider";
+    }
+
+    /**
      * 跳转到商品管理页面
      * @return
      */

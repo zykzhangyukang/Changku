@@ -45,11 +45,12 @@
                 },
                 color: ['#3398DB'],
                 title: {
-                    text: '系统访问记录'
+                    text: '访问记录'
                 },
+                calculable: true,
                 tooltip: {},
                 legend: {
-                    data:['销量']
+                    data:['蒸发量','降水量']
                 },
                 stroke: {
                     show: true,
@@ -135,7 +136,8 @@
                         name:'访问趋势',
                         type: 'line',
                         data: mydata,
-                    }]
+                    },
+                    ]
                 });
             });
         });

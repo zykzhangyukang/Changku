@@ -42,18 +42,33 @@
 </table>
 <!--数据表格结束-->
 
-
+<!--单行操作工具栏--->
+<div id="customerRowBar" style="display: none;">
+    <button    type="button" lay-event="edit"  class="layui-btn   layui-btn-xs"><span class="layui-icon layui-icon-edit"></span>修改</button>
+    <button    type="button" lay-event="delete"  class="layui-btn layui-btn-xs layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>删除</button>
+</div>
 <!-- 添加和修改的弹出层开始 -->
 <div style="display: none;padding: 10px" id="addOrUpdateModal">
     <form action="" method="post" class="layui-form layui-form-pane" id="dataFrm" lay-filter="dataFrm">
         <div class="layui-form-item">
             <label class="layui-form-label">客户姓名</label>
             <div class="layui-input-inline">
+                <input type="hidden" name="id" id="key">
                 <input type="text"  name="customername" lay-verify="required" autocomplete="off" placeholder="请输入标题" class="layui-input">
             </div>
             <label class="layui-form-label">电话号码</label>
             <div class="layui-input-inline">
                 <input type="text" lay-verify="required" name="customertell" placeholder="请输入电话号码" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">客户生日</label>
+        <div class="layui-input-inline">
+            <input class="layui-input" name="birthday" id="birthday" placeholder="客户生日" autocomplete="off">
+        </div>
+            <label class="layui-form-label">车辆型号</label>
+            <div class="layui-input-inline">
+                <input type="text" name="cartype" lay-verify="required" placeholder="请输入车型号" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
@@ -86,17 +101,17 @@
                 <input type="text" name="carno" lay-verify="required" placeholder="请输入车牌号" autocomplete="off" class="layui-input">
             </div>
         </div>
-        <div class="layui-form-item">
 
-            <label class="layui-form-label">型号</label>
-            <div class="layui-input-inline">
-                <input type="text" name="cartype" lay-verify="required" placeholder="请输入车型号" autocomplete="off" class="layui-input">
-            </div>
-        </div>
         <div  class="layui-form-item">
             <label class="layui-form-label">备注</label>
             <div class="layui-input-block">
                 <textarea name="remark" placeholder="请输入内容备注" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div  class="layui-form-item">
+            <label class="layui-form-label">编号</label>
+            <div class="layui-input-block">
+                <input type="text"  name="customerno" placeholder="请输入电话号码" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
@@ -124,6 +139,10 @@
         var form=layui.form;
         var table=layui.table;
         var laydate=layui.laydate;
+        laydate.render({
+            elem:'#birthday',
+            type:'datetime'
+        });
         //加载数据
         var tableIns =table.render({
             elem: '#customerTable'
@@ -134,19 +153,20 @@
             ,page: true
             ,cols: [ [
                 {type: 'checkbox', fixed: 'left'}
-                ,{field:'customerno', title:'序号',align:'center',edit: 'text',sort:'true'}
-                ,{field:'id', title:'id',hide:true,align:'center',edit: 'text'}
-                ,{field:'customername', title:'姓名',align:'center',edit: 'text',sort:'true'}
-                ,{field:'customertell', title:'电话',align:'center',edit: 'text'}
-                ,{field:'birthday', title:'出生年月',align:'center',edit: 'date'}
-                ,{field:'sh', title:'税号',align:'center',sort:'true',edit: 'text'}
-                ,{field:'bank', title:'开户行',align:'center',sort:'true',edit: 'text'}
-                ,{field:'bankno', title:'银行账户',align:'center',sort:'true',edit: 'text'}
-                ,{field:'address', title:'地址',align:'center',sort:'true',edit: 'text'}
-                ,{field:'carpinpai', title:'品牌',align:'center',sort:'true',edit: 'text'}
-                ,{field:'cartype', title:'型号',align:'center',sort:'true',edit: 'text'}
-                ,{field:'carno', title:'车牌',align:'center',sort:'true',edit: 'text'}
-                ,{field:'remark', title:'备注',align:'center',sort:'true',edit: 'text'}
+                ,{field:'customerno', title:'序号',align:'center',width: 50,sort:'true'}
+                ,{field:'id', title:'id',hide:true,align:'center',width:100 }
+                ,{field:'customername', title:'姓名',align:'center',width: '100',sort:'true'}
+                ,{field:'customertell', title:'电话',align:'center',width: '100'}
+                ,{field:'birthday', title:'出生年月',align:'center',width: '100'}
+                ,{field:'sh', title:'税号',align:'center',sort:'true',width: '100'}
+                ,{field:'bank', title:'开户行',align:'center',sort:'true',width: '100'}
+                ,{field:'bankno', title:'银行账户',align:'center',sort:'true',width: '100'}
+                ,{field:'address', title:'地址',align:'center',sort:'true',width: '100'}
+                ,{field:'carpinpai', title:'品牌',align:'center',sort:'true',width: '100'}
+                ,{field:'cartype', title:'型号',align:'center',sort:'true',width: '100'}
+                ,{field:'carno', title:'车牌',align:'center',sort:'true',width: '100'}
+                ,{field:'remark', title:'备注',align:'center',sort:'true',width: '100'}
+                ,{fixed: 'right', title:'操作', toolbar: '#customerRowBar',align:'center',width:'180'}
             ] ]
         });
         //监听单元格编辑
@@ -239,8 +259,8 @@
             mainIndex=layer.open({
                 type:1,
                 content: $("#addOrUpdateModal"),
-                area:['800px','520px'],
-                title:'发布客户',
+                area:['800px','550px'],
+                title:'添加客户',
                 success:function(){
                     $("#dataFrm")[0].reset();
                     url="/customer/add";
@@ -269,9 +289,7 @@
                 success:function(){
                     $("#dataFrm")[0].reset();
                     //装载新的数据
-                    //装载新的数据
                     form.val("dataFrm",data);
-                    layedit.setContent(editIndex,data.content);
                     url="/customer/update";
                 }
             });
@@ -279,7 +297,7 @@
 
         //删除单记录
         function deletecustomer(data){
-            layer.confirm('你确定要删除['+data.title+']这条客户吗?', {icon: 3, title:'提示'}, function(index){
+            layer.confirm('你确定要删除['+data.customername+']这个客户吗?', {icon: 3, title:'提示'}, function(index){
                 $.post("/customer/delete",{id:data.id},function(res){
                     if(res.code==200){
                         tableIns.reload();
@@ -295,7 +313,7 @@
             var checkStatus = table.checkStatus('customerTable');
             var dataLength=checkStatus.data.length;
             if(dataLength>0){
-                layer.confirm('你确定要删除这些数据吗?', {icon: 3, title:'提示'}, function(index){
+                layer.confirm('你确定要删除这些客户吗?', {icon: 3, title:'提示'}, function(index){
                     var data=checkStatus.data; //获取选中行的数据
                     var ids="";
                     $.each(data,function(index,item){
@@ -315,8 +333,6 @@
                 layer.msg("请选中操作行")
             }
         }
-
-
     });
 </script>
 </body>

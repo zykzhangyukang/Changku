@@ -10,6 +10,34 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/biz")
 public class BizController {
+
+
+    /**
+     * 跳转到商品管理页面
+     * @return
+     */
+    @GetMapping("/toProductManager")
+    public String toProductManager(){
+        return "biz/product/product";
+    }
+
+    /**
+     * 跳转到商品管理页面左边
+     * @return
+     */
+    @GetMapping("/toProductLeft")
+    public String toProductLeft(){
+        return "biz/product/productleft";
+    }
+
+    /**
+     * 跳转到商品管理右边
+     * @return
+     */
+    @GetMapping("/toProductRight")
+    public String toProductRight(){
+        return "biz/product/productright";
+    }
     /**
      * 跳转到客户管理页面
      * @return

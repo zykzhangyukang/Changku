@@ -46,13 +46,24 @@ public class CustomerController {
      * 删除
      * @return
      */
+    @RequiresPermissions({"customer:delete"})
+    @PostMapping("/delete")
+    public BizResultObject delete(String id){
+        try {
+            customerService.delete(id.toString());
+            return BizResultObject.DELETE_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return BizResultObject.DELETE_ERROR;
+        }
+    }
     /**
      * 批量删除删除
      * @return
      */
     @RequiresPermissions({"notice:batchDelete"})
     @PostMapping("/batchDelete")
-    public ResultObj batchDelete(String ids){
+    public BizResultObject batchDelete(String ids){
         List<String> list=new ArrayList<>();
         try {
             if(ids!=null&&ids.contains(",")){
@@ -66,9 +77,9 @@ public class CustomerController {
             }
         }catch (Exception e){
             e.printStackTrace();
-            return ResultObj.DELETE_ERROR;
+            return BizResultObject.DELETE_ERROR;
         }
-        return ResultObj.DELETE_SUCCESS;
+        return BizResultObject.DELETE_SUCCESS;
     }
     /**
      * 添加

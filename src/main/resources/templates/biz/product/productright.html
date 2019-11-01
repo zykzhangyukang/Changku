@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>商品管理页面右边部分</title>
+    <link rel="stylesheet" href="/resources/layui/css/layui.css" media="all" />
+    <link rel="stylesheet" href="/resources/css/public.css" media="all" />
+    <link rel="stylesheet" href="/resources/layui_ext/dtree/dtree.css" media="all" />
+    <link rel="stylesheet" href="/resources/layui_ext/dtree/font/dtreefont.css" media="all" />
+</head>
+<body class="childrenBody">
+<!--查询条件开始-->
+<blockquote class="layui-elem-quote">
+    <form class="layui-form" action="" id="departmentForm" method="post">
+        <span>品牌:</span>&nbsp;
+        <div class="layui-inline">
+            <input class="layui-input" name="productbrand" id="title" placeholder="品牌" autocomplete="off">
+        </div>&nbsp;
+        <span>型号:</span>
+        <div class="layui-inline">
+            <input class="layui-input" name="productmodel" id="productmodel" placeholder="型号" autocomplete="off">
+        </div>&nbsp;
+        <span>规格:</span>
+        <div class="layui-inline">
+            <input class="layui-input" name="type" id="type" placeholder="规格" autocomplete="off">
+        </div>&nbsp;
+        <button type="button" class="layui-btn layui-btn-normal"  lay-submit="" lay-filter="doSearch"><span class="layui-icon layui-icon-search"></span>搜索</button></legend>
+        <button type="reset" class="layui-btn layui-btn-warm" ><span class="layui-icon layui-icon-refresh"></span>重置</button></legend>
+    </form>
+</blockquote>
+<!--查询条件结束-->
+
+<!--数据表格开始-->
+<table class="layui-hide" id="departmentTable" lay-filter="departmentTable">
+</table>
+<!--数据表格结束-->
+
+<!--表格顶部工具栏部分--->
+<div id="departmentToolBar" style="display: none;">
+    <button type="button"  lay-event="add"  class="layui-btn layui-btn-sm layui-btn-warning"><span class="layui-icon layui-icon-add-1"></span>添加</button>
+</div>
+<!--单行操作工具栏--->
+<div id="departmentRowBar" style="display: none;">
+    <button    type="button" lay-event="edit"  class="layui-btn   layui-btn-xs"><span class="layui-icon layui-icon-edit"></span>修改</button>
+    <button    type="button" lay-event="delete"  class="layui-btn layui-btn-xs layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>删除</button>
+</div>
+
+<!-- 添加和修改的弹出层开始 -->
+<div style="display: none;padding: 10px" id="addOrUpdateModal">
+    <form action="" method="post" class="layui-form layui-form-pane" id="dataFrm" lay-filter="dataFrm">
+        <div class="layui-form-item">
+            <label class="layui-form-label">商品品牌</label>
+            <div class="layui-input-inline">
+                <input type="text" lay-verify="required" name="productbrand" placeholder="商品品牌" id="productbrand" class="layui-input">
+            </div>
+            <label class="layui-form-label" >商品类型</label>
+            <div class="layui-input-inline" style="width:150px;">
+                <select name="typeid" id="server" lay-verify="required">
+                    <option value="">请选择商品类型</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">商品型号</label>
+            <div class="layui-input-inline">
+                <input type="hidden" id="key" name="id">
+                <input type="text" name="productmodel" lay-verify="required"  placeholder="商品型号" autocomplete="off" class="layui-input">
+            </div>
+            <label class="layui-form-label">规格</label>
+            <div class="layui-input-inline">
+                <input type="text" name="type" lay-verify="required" placeholder="规格" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">版本号</label>
+            <div class="layui-input-block">
+                <input name="version"  lay-verify="required" placeholder="版本号" class="layui-input" >
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block">
+                <textarea name="remark"  lay-verify="required" placeholder="请输入备注" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button type="button" class="layui-btn" lay-submit="" lay-filter="doSubmit" id="doSubmit">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+<!-- 添加和修改的弹出层结束 -->
+
+<script type="text/javascript" src="/resources/layui/layui.js"></script>
+<script type="text/javascript">
+    var tableIns;
+    var selectTree;
+   layui.use(['jquery','form','table','layer'],function () {
+        var $=layui.jquery;
+        var layer=layui.layer;
+        var form=layui.form;
+        var table=layui.table;
+        var index = layer.load(1);
+
+        //加载数据
+        tableIns=table.render({
+            elem: '#departmentTable'
+            ,url:'/product/listProductConfigs'
+            ,toolbar: '#departmentToolBar' //开启头部工具栏，并为其绑定左侧模板
+            ,title: '部门信息数据表'
+            ,height:'full-60'
+            ,page: true
+            ,cols: [ [
+                ,{field:'id', title:'id',hide:true,align:'center',sort:'true'}
+                ,{field:'productbrand', title:'商品品牌',align:'center',sort:'true'}
+                ,{field:'type', title:'规格',align:'center',sort:'true'}
+                ,{field:'productmodel', title:'商品型号',align:'center',sort:'true'}
+                ,{field:'remark', title:'备注',align:'center'}
+                ,{field:'version', title:'版本号',align:'center',sort:'true'}
+                ,{fixed: 'right', title:'操作', toolbar: '#departmentRowBar',align:'center',width:'180'}
+            ] ]
+            ,done:function () {//返回数据执行回调函数
+                layer.close(index);    //返回数据关闭loading
+            }
+        });
+       $.ajax({
+           url:"/product/listProductType",
+           type:"GET",
+           dataType:"json",
+           success:function(result){
+               var list = result.data;    //返回的数据
+               var server = document.getElementById("server"); //server为select定义的id
+               for(var p in list){
+                   console.log(p)
+                   var option = document.createElement("option");  // 创建添加option属性
+                   option.setAttribute("value",list[p].id); // 给option的value添加值
+                   option.innerText=list[p].producttype;     // 打印option对应的纯文本
+                   server.appendChild(option);
+
+                   form.render("select");            // 刷性select，显示出数据
+               } } });
+        //模糊查询
+        form.on("submit(doSearch)",function(data){
+            tableIns.reload({
+                where:data.field,
+                page:{
+                    curr:1
+                }
+            });
+            return false;
+        });
+        //监听工具条的事件
+        table.on("toolbar(departmentTable)",function(obj){
+            switch(obj.event){
+                case 'batchDelete':
+                    batchDelete();
+                    break;
+                case 'add':
+                    openAddModal();
+                    break;
+            };
+        });
+
+        //监听行工具条的事件
+        table.on("tool(departmentTable)",function(obj){
+            var data = obj.data; //获得当前行数据
+            switch(obj.event){
+                case 'delete':
+                    deletedepartment(data);
+                    break;
+                case 'edit':
+                    openUpdatedepartmentModal(data);
+                    break;
+            };
+        });
+        var mainIndex;
+        var url;
+        //打开添加的弹出层
+        function openAddModal(){
+            $("#key").val("");
+            form.render("server");
+            mainIndex=layer.open({
+                type:1,
+                content: $("#addOrUpdateModal"),
+                area:['800px','520px'],
+                title:'添加配置',
+                success:function(){
+                    $("#dataFrm")[0].reset();
+                    url="/product/addConfig";
+                }
+            });
+        }
+        //点击添加
+        form.on("submit(doSubmit)",function (data) {
+            $.post(url,data.field,function(res){
+                if(res.code==200){
+                    tableIns.reload();
+                }
+                layer.msg(res.msg);
+                layer.close(mainIndex);
+            })
+            return false;
+        })
+        //点击更新弹出更新框
+        function openUpdatedepartmentModal(data){
+            mainIndex=layer.open({
+                type:1,
+                content:$("#addOrUpdateModal"),
+                area:['800px','550'],
+                title:'修改配置信息',
+                success:function(){
+                    $("#dataFrm")[0].reset();
+                    form.val("dataFrm",data);
+                    $("#server option[value='"+data.typeid+"']").attr("selected","selected");
+                    url="/product/updateConfig";
+                }
+            });
+        }
+        //删除单记录
+        function deletedepartment(data){
+            layer.confirm('你确定要删除这个商品配置吗?', {icon: 3, title:'提示'}, function(index){
+                $.post("/product/deleteConfig",{id:data.id},function(res){
+                    if(res.code==200){
+                        tableIns.reload();
+                    }
+                    layer.msg(res.msg);
+                })
+                layer.close(index);
+            });
+        }
+    });
+   function loadRightProductConfig(typeId) {
+       tableIns.reload({
+           where:{typeid:typeId},
+           page:{
+               curr:1
+           }
+       });
+       return false;
+   }
+</script>
+</body>
+</html>

@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coderman.changku.biz.mapper.ProductCongMapper">
+  <resultMap id="BaseResultMap" type="com.coderman.changku.biz.modal.ProductCong">
+    <id column="fID" jdbcType="VARCHAR" property="fid" />
+    <result column="productbrand" jdbcType="VARCHAR" property="productbrand" />
+    <result column="productmodel" jdbcType="VARCHAR" property="productmodel" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="typeid" jdbcType="VARCHAR" property="typeid" />
+    <result column="version" jdbcType="INTEGER" property="version" />
+    <result column="fcor" jdbcType="VARCHAR" property="fcor" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    fID, productbrand, productmodel, type, remark, typeid, version, fcor
+  </sql>
+  <select id="selectByExample" parameterType="com.coderman.changku.biz.modal.ProductCongExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from oa_product_cong
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from oa_product_cong
+    where fID = #{fid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from oa_product_cong
+    where fID = #{fid,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.coderman.changku.biz.modal.ProductCongExample">
+    delete from oa_product_cong
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.coderman.changku.biz.modal.ProductCong">
+    insert into oa_product_cong (fID, productbrand, productmodel, 
+      type, remark, typeid, 
+      version, fcor)
+    values (#{fid,jdbcType=VARCHAR}, #{productbrand,jdbcType=VARCHAR}, #{productmodel,jdbcType=VARCHAR}, 
+      #{type,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{typeid,jdbcType=VARCHAR}, 
+      #{version,jdbcType=INTEGER}, #{fcor,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.coderman.changku.biz.modal.ProductCong">
+    insert into oa_product_cong
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="fid != null">
+        fID,
+      </if>
+      <if test="productbrand != null">
+        productbrand,
+      </if>
+      <if test="productmodel != null">
+        productmodel,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="typeid != null">
+        typeid,
+      </if>
+      <if test="version != null">
+        version,
+      </if>
+      <if test="fcor != null">
+        fcor,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="fid != null">
+        #{fid,jdbcType=VARCHAR},
+      </if>
+      <if test="productbrand != null">
+        #{productbrand,jdbcType=VARCHAR},
+      </if>
+      <if test="productmodel != null">
+        #{productmodel,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="typeid != null">
+        #{typeid,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null">
+        #{version,jdbcType=INTEGER},
+      </if>
+      <if test="fcor != null">
+        #{fcor,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.coderman.changku.biz.modal.ProductCongExample" resultType="java.lang.Integer">
+    select count(*) from oa_product_cong
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update oa_product_cong
+    <set>
+      <if test="record.fid != null">
+        fID = #{record.fid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productbrand != null">
+        productbrand = #{record.productbrand,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productmodel != null">
+        productmodel = #{record.productmodel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.typeid != null">
+        typeid = #{record.typeid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.version != null">
+        version = #{record.version,jdbcType=INTEGER},
+      </if>
+      <if test="record.fcor != null">
+        fcor = #{record.fcor,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update oa_product_cong
+    set fID = #{record.fid,jdbcType=VARCHAR},
+      productbrand = #{record.productbrand,jdbcType=VARCHAR},
+      productmodel = #{record.productmodel,jdbcType=VARCHAR},
+      type = #{record.type,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      typeid = #{record.typeid,jdbcType=VARCHAR},
+      version = #{record.version,jdbcType=INTEGER},
+      fcor = #{record.fcor,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.coderman.changku.biz.modal.ProductCong">
+    update oa_product_cong
+    <set>
+      <if test="productbrand != null">
+        productbrand = #{productbrand,jdbcType=VARCHAR},
+      </if>
+      <if test="productmodel != null">
+        productmodel = #{productmodel,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="typeid != null">
+        typeid = #{typeid,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null">
+        version = #{version,jdbcType=INTEGER},
+      </if>
+      <if test="fcor != null">
+        fcor = #{fcor,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where fID = #{fid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.coderman.changku.biz.modal.ProductCong">
+    update oa_product_cong
+    set productbrand = #{productbrand,jdbcType=VARCHAR},
+      productmodel = #{productmodel,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      typeid = #{typeid,jdbcType=VARCHAR},
+      version = #{version,jdbcType=INTEGER},
+      fcor = #{fcor,jdbcType=VARCHAR}
+    where fID = #{fid,jdbcType=VARCHAR}
+  </update>
+
+</mapper>

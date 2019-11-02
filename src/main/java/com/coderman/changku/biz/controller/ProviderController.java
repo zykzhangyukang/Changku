@@ -28,6 +28,12 @@ public class ProviderController {
     @Autowired
     private ProviderService providerService;
 
+
+    @GetMapping("/listAll")
+    public ResultJson listAll(){
+        List<Provider> providers=providerService.listAll();
+        return new ResultJson(providers);
+    }
     /**
      * 查询客户信息
      * @param providerVo

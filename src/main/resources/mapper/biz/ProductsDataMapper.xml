@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coderman.changku.biz.mapper.ProductsDataMapper">
+  <resultMap id="BaseResultMap" type="com.coderman.changku.biz.modal.ProductsData">
+    <id column="fID" jdbcType="VARCHAR" property="fid" />
+    <result column="producttype" jdbcType="VARCHAR" property="producttype" />
+    <result column="MerchantName" jdbcType="VARCHAR" property="merchantname" />
+    <result column="productbrand" jdbcType="VARCHAR" property="productbrand" />
+    <result column="productmodel" jdbcType="VARCHAR" property="productmodel" />
+    <result column="unit" jdbcType="VARCHAR" property="unit" />
+    <result column="productcount" jdbcType="INTEGER" property="productcount" />
+    <result column="productsingleprice" jdbcType="DECIMAL" property="productsingleprice" />
+    <result column="productsprice" jdbcType="DECIMAL" property="productsprice" />
+    <result column="addtime" jdbcType="VARCHAR" property="addtime" />
+    <result column="manager" jdbcType="VARCHAR" property="manager" />
+    <result column="operator" jdbcType="VARCHAR" property="operator" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="allsum" jdbcType="INTEGER" property="allsum" />
+    <result column="version" jdbcType="INTEGER" property="version" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    fID, producttype, MerchantName, productbrand, productmodel, unit, productcount, productsingleprice, 
+    productsprice, addtime, manager, operator, type, state, allsum, version
+  </sql>
+  <select id="selectByExample" parameterType="com.coderman.changku.biz.modal.ProductsDataExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from oa_products_data
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from oa_products_data
+    where fID = #{fid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from oa_products_data
+    where fID = #{fid,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.coderman.changku.biz.modal.ProductsDataExample">
+    delete from oa_products_data
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.coderman.changku.biz.modal.ProductsData">
+    insert into oa_products_data (fID, producttype, MerchantName, 
+      productbrand, productmodel, unit, 
+      productcount, productsingleprice, productsprice, 
+      addtime, manager, operator, 
+      type, state, allsum, 
+      version)
+    values (#{fid,jdbcType=VARCHAR}, #{producttype,jdbcType=VARCHAR}, #{merchantname,jdbcType=VARCHAR}, 
+      #{productbrand,jdbcType=VARCHAR}, #{productmodel,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR}, 
+      #{productcount,jdbcType=INTEGER}, #{productsingleprice,jdbcType=DECIMAL}, #{productsprice,jdbcType=DECIMAL}, 
+      #{addtime,jdbcType=VARCHAR}, #{manager,jdbcType=VARCHAR}, #{operator,jdbcType=VARCHAR}, 
+      #{type,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER}, #{allsum,jdbcType=INTEGER}, 
+      #{version,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.coderman.changku.biz.modal.ProductsData">
+    insert into oa_products_data
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="fid != null">
+        fID,
+      </if>
+      <if test="producttype != null">
+        producttype,
+      </if>
+      <if test="merchantname != null">
+        MerchantName,
+      </if>
+      <if test="productbrand != null">
+        productbrand,
+      </if>
+      <if test="productmodel != null">
+        productmodel,
+      </if>
+      <if test="unit != null">
+        unit,
+      </if>
+      <if test="productcount != null">
+        productcount,
+      </if>
+      <if test="productsingleprice != null">
+        productsingleprice,
+      </if>
+      <if test="productsprice != null">
+        productsprice,
+      </if>
+      <if test="addtime != null">
+        addtime,
+      </if>
+      <if test="manager != null">
+        manager,
+      </if>
+      <if test="operator != null">
+        operator,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="allsum != null">
+        allsum,
+      </if>
+      <if test="version != null">
+        version,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="fid != null">
+        #{fid,jdbcType=VARCHAR},
+      </if>
+      <if test="producttype != null">
+        #{producttype,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantname != null">
+        #{merchantname,jdbcType=VARCHAR},
+      </if>
+      <if test="productbrand != null">
+        #{productbrand,jdbcType=VARCHAR},
+      </if>
+      <if test="productmodel != null">
+        #{productmodel,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null">
+        #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="productcount != null">
+        #{productcount,jdbcType=INTEGER},
+      </if>
+      <if test="productsingleprice != null">
+        #{productsingleprice,jdbcType=DECIMAL},
+      </if>
+      <if test="productsprice != null">
+        #{productsprice,jdbcType=DECIMAL},
+      </if>
+      <if test="addtime != null">
+        #{addtime,jdbcType=VARCHAR},
+      </if>
+      <if test="manager != null">
+        #{manager,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null">
+        #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="allsum != null">
+        #{allsum,jdbcType=INTEGER},
+      </if>
+      <if test="version != null">
+        #{version,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.coderman.changku.biz.modal.ProductsDataExample" resultType="java.lang.Integer">
+    select count(*) from oa_products_data
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update oa_products_data
+    <set>
+      <if test="record.fid != null">
+        fID = #{record.fid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.producttype != null">
+        producttype = #{record.producttype,jdbcType=VARCHAR},
+      </if>
+      <if test="record.merchantname != null">
+        MerchantName = #{record.merchantname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productbrand != null">
+        productbrand = #{record.productbrand,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productmodel != null">
+        productmodel = #{record.productmodel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.unit != null">
+        unit = #{record.unit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productcount != null">
+        productcount = #{record.productcount,jdbcType=INTEGER},
+      </if>
+      <if test="record.productsingleprice != null">
+        productsingleprice = #{record.productsingleprice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.productsprice != null">
+        productsprice = #{record.productsprice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.addtime != null">
+        addtime = #{record.addtime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.manager != null">
+        manager = #{record.manager,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operator != null">
+        operator = #{record.operator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=VARCHAR},
+      </if>
+      <if test="record.state != null">
+        state = #{record.state,jdbcType=INTEGER},
+      </if>
+      <if test="record.allsum != null">
+        allsum = #{record.allsum,jdbcType=INTEGER},
+      </if>
+      <if test="record.version != null">
+        version = #{record.version,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update oa_products_data
+    set fID = #{record.fid,jdbcType=VARCHAR},
+      producttype = #{record.producttype,jdbcType=VARCHAR},
+      MerchantName = #{record.merchantname,jdbcType=VARCHAR},
+      productbrand = #{record.productbrand,jdbcType=VARCHAR},
+      productmodel = #{record.productmodel,jdbcType=VARCHAR},
+      unit = #{record.unit,jdbcType=VARCHAR},
+      productcount = #{record.productcount,jdbcType=INTEGER},
+      productsingleprice = #{record.productsingleprice,jdbcType=DECIMAL},
+      productsprice = #{record.productsprice,jdbcType=DECIMAL},
+      addtime = #{record.addtime,jdbcType=VARCHAR},
+      manager = #{record.manager,jdbcType=VARCHAR},
+      operator = #{record.operator,jdbcType=VARCHAR},
+      type = #{record.type,jdbcType=VARCHAR},
+      state = #{record.state,jdbcType=INTEGER},
+      allsum = #{record.allsum,jdbcType=INTEGER},
+      version = #{record.version,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.coderman.changku.biz.modal.ProductsData">
+    update oa_products_data
+    <set>
+      <if test="producttype != null">
+        producttype = #{producttype,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantname != null">
+        MerchantName = #{merchantname,jdbcType=VARCHAR},
+      </if>
+      <if test="productbrand != null">
+        productbrand = #{productbrand,jdbcType=VARCHAR},
+      </if>
+      <if test="productmodel != null">
+        productmodel = #{productmodel,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null">
+        unit = #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="productcount != null">
+        productcount = #{productcount,jdbcType=INTEGER},
+      </if>
+      <if test="productsingleprice != null">
+        productsingleprice = #{productsingleprice,jdbcType=DECIMAL},
+      </if>
+      <if test="productsprice != null">
+        productsprice = #{productsprice,jdbcType=DECIMAL},
+      </if>
+      <if test="addtime != null">
+        addtime = #{addtime,jdbcType=VARCHAR},
+      </if>
+      <if test="manager != null">
+        manager = #{manager,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null">
+        operator = #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="allsum != null">
+        allsum = #{allsum,jdbcType=INTEGER},
+      </if>
+      <if test="version != null">
+        version = #{version,jdbcType=INTEGER},
+      </if>
+    </set>
+    where fID = #{fid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.coderman.changku.biz.modal.ProductsData">
+    update oa_products_data
+    set producttype = #{producttype,jdbcType=VARCHAR},
+      MerchantName = #{merchantname,jdbcType=VARCHAR},
+      productbrand = #{productbrand,jdbcType=VARCHAR},
+      productmodel = #{productmodel,jdbcType=VARCHAR},
+      unit = #{unit,jdbcType=VARCHAR},
+      productcount = #{productcount,jdbcType=INTEGER},
+      productsingleprice = #{productsingleprice,jdbcType=DECIMAL},
+      productsprice = #{productsprice,jdbcType=DECIMAL},
+      addtime = #{addtime,jdbcType=VARCHAR},
+      manager = #{manager,jdbcType=VARCHAR},
+      operator = #{operator,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      state = #{state,jdbcType=INTEGER},
+      allsum = #{allsum,jdbcType=INTEGER},
+      version = #{version,jdbcType=INTEGER}
+    where fID = #{fid,jdbcType=VARCHAR}
+  </update>
+
+</mapper>

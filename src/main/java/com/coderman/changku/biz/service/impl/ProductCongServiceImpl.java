@@ -1,5 +1,6 @@
 package com.coderman.changku.biz.service.impl;
 
+import com.coderman.changku.biz.mapper.ProductConfigExtMapper;
 import com.coderman.changku.biz.mapper.ProductCongMapper;
 import com.coderman.changku.biz.modal.ProductCong;
 import com.coderman.changku.biz.modal.ProductCongExample;
@@ -10,7 +11,7 @@ import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by zhangyukang on 2019/11/1 10:58
@@ -20,6 +21,9 @@ public class ProductCongServiceImpl implements ProductCongService {
 
     @Autowired
     private ProductCongMapper productCongMapper;
+
+    @Autowired
+    private ProductConfigExtMapper productConfigExtMapper;
 
     @Override
     public Page<ProductCong> findProductConfs(ProductCongVo productCongVo, Integer page, Integer limit) {
@@ -43,6 +47,24 @@ public class ProductCongServiceImpl implements ProductCongService {
     @Override
     public void add(ProductCong productCong) {
         productCongMapper.insertSelective(productCong);
+    }
+
+    @Override
+    public List<String> loadAllBrandByTypeId(String typeid) {
+        List<String> productCongs = productConfigExtMapper.loadAllBrandByTypeId(typeid);
+        return productCongs;
+    }
+
+    @Override
+    public List<String> loadAllModelByBrand(String productbrand) {
+        List<String> model = productConfigExtMapper.loadAllModelByBrand(productbrand);
+        return model;
+    }
+
+    @Override
+    public List<String> loadAllTypeByModel(String productmodel) {
+        List<String> typeByModel = productConfigExtMapper.loadAllTypeByModel(productmodel);
+        return typeByModel;
     }
 
     private ProductCongExample createProductCongExample(ProductCongVo productCongVo) {

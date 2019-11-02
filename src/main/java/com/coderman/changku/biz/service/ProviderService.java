@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface ProviderService {
     /**
-     * 查询客户
+     * 查询供应商
      * @param ProviderVo
      * @param pageNo
      * @param pageSize
@@ -20,20 +20,20 @@ public interface ProviderService {
     public BizPage<Provider> findPage(ProviderVo ProviderVo, Integer pageNo, Integer pageSize);
 
     /**
-     * 添加客户
+     * 添加供应商
      * @param Provider
      */
     public void add(Provider Provider);
 
     /**
-     * 删除客户
+     * 删除供应商
      * @param fid
      */
     public void delete(String fid);
 
 
     /**
-     * 更新客户
+     * 更新供应商
      * @param Provider
      */
     public void update(Provider Provider);
@@ -43,4 +43,11 @@ public interface ProviderService {
      * @param list
      */
     void batchDelete(List<String> list);
+
+    /**
+     * 查询所有供应商
+     * @return
+     */
+    List<Provider> listAll();
+    
 }

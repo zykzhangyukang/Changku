@@ -2,6 +2,8 @@ package com.coderman.changku.biz.modal;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Objects;
+
 public class ProductCong {
     @JsonProperty(value = "id")
     private String fid;
@@ -83,4 +85,5 @@ public class ProductCong {
     public void setFcor(String fcor) {
         this.fcor = fcor == null ? null : fcor.trim();
     }
+
 }

@@ -12,4 +12,6 @@ public interface ProductTypeService {
     List<ProductMain> listAll();
 
     void add(ProductMain productMain);
+
+    String finTypeById(String producttype);
 }

@@ -5,12 +5,16 @@ import com.coderman.changku.biz.commons.IDUtils;
 import com.coderman.changku.biz.commons.ResultJson;
 import com.coderman.changku.biz.modal.ProductCong;
 import com.coderman.changku.biz.modal.ProductMain;
+import com.coderman.changku.biz.modal.Products;
 import com.coderman.changku.biz.service.ProductCongService;
 import com.coderman.changku.biz.service.ProductTypeService;
+import com.coderman.changku.biz.service.ProductsService;
 import com.coderman.changku.biz.vo.ProductCongVo;
+import com.coderman.changku.biz.vo.ProductsVo;
 import com.coderman.changku.sys.commons.Page;
 import com.coderman.changku.sys.commons.WebUtil;
 import com.coderman.changku.sys.modal.User;
+import jdk.nashorn.internal.objects.annotations.Getter;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**商品
  * Created by zhangyukang on 2019/11/1 10:57
@@ -34,7 +39,80 @@ public class ProductController {
     @Autowired
     private ProductCongService productCongService;
 
+    @Autowired
+    private ProductsService productsService;
 
+    /*********************************入库库操作开始***************************************/
+    /**
+     * 入库商品
+     * @return
+     */
+    @PostMapping("/addProducts")
+    public BizResultObject addProducts(ProductsVo productsVo){
+        productsVo.setFid(IDUtils.getGUID());
+        User user = (User) WebUtil.getSession().getAttribute("user");
+        productsVo.setManager(user.getName());
+        try {
+            productsVo.setProducttype(productTypeService.finTypeById(productsVo.getProducttype()));
+            productsVo.setManager(user.getName());
+            productsVo.setAddtime(new Date().toString());
+            productsVo.setOperator(user.getName());
+            productsService.add(productsVo);
+            return BizResultObject.ADD_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return BizResultObject.ADD_FAIL;
+        }
+    }
+    /**
+     * 删除入库记录
+     * @return
+     */
+    @PostMapping("/deleteProducts")
+    public BizResultObject deleteProducts(String id){
+        try {
+            productsService.delete(id);
+            return BizResultObject.DELETE_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return BizResultObject.DELETE_ERROR;
+        }
+    }
+
+    /**
+     * 入库商品查询
+     * @param page
+     * @param limit
+     * @return
+     */
+    @GetMapping("/listProducts")
+    public ResultJson listProducts(ProductsVo productsVo,Integer page,Integer limit){
+        Page<Products> productCongPage=productsService.listProducts(productsVo,page,limit);
+        return new ResultJson(productCongPage.getTotal(),productCongPage.getRows());
+    }
+
+
+
+    /*********************************入库存操作结束***************************************/
+
+
+    @GetMapping("/loadAllTypeByModel")
+    public ResultJson loadAllTypeByModel(String productmodel){
+        List<String> type=productCongService.loadAllTypeByModel(productmodel);
+        return new ResultJson(type);
+    }
+
+    @GetMapping("/loadAllModelByBrand")
+    public ResultJson loadAllModelByBrand(String productbrand){
+        List<String> model=productCongService.loadAllModelByBrand(productbrand);
+        return new ResultJson(model);
+    }
+
+    @GetMapping("/loadAllBrandByTypeId")
+    public ResultJson loadAllBrandByTypeId(String typeid){
+        List<String> productCongs=productCongService.loadAllBrandByTypeId(typeid);
+        return new ResultJson(productCongs);
+    }
     /**
      * 添加商品配置
      * @return

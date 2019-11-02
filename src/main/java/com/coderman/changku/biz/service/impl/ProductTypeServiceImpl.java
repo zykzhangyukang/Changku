@@ -2,6 +2,7 @@ package com.coderman.changku.biz.service.impl;
 
 import com.coderman.changku.biz.mapper.ProductMainMapper;
 import com.coderman.changku.biz.modal.ProductMain;
+import com.coderman.changku.biz.modal.ProductMainExample;
 import com.coderman.changku.biz.service.ProductTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,5 +24,16 @@ public class ProductTypeServiceImpl implements ProductTypeService {
     @Override
     public void add(ProductMain productMain) {
         productMainMapper.insertSelective(productMain);
+    }
+
+    @Override
+    public String finTypeById(String producttype) {
+        ProductMainExample example = new ProductMainExample();
+        example.createCriteria().andFidEqualTo(producttype);
+        List<ProductMain> productMainList = productMainMapper.selectByExample(example);
+        if(productMainList.size()>0){
+            return productMainList.get(0).getProducttype();
+        }
+        return null;
     }
 }

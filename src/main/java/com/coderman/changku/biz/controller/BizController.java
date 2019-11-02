@@ -13,6 +13,23 @@ public class BizController {
 
 
     /**
+     * 跳转到字典管理页面
+     * @return
+     */
+    @GetMapping("/toUnitManager")
+    public String toUnitManager(){
+        return "biz/unit/unit";
+    }
+
+    /**
+     * 跳转到入库管理页面
+     * @return
+     */
+    @GetMapping("/toProductsManager")
+    public String toProductsManager(){
+        return "biz/product-in/products";
+    }
+    /**
      * 跳转到供应商管理页面
      * @return
      */

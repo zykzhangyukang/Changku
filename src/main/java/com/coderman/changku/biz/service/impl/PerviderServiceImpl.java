@@ -81,4 +81,9 @@ public class PerviderServiceImpl implements ProviderService {
         example.createCriteria().andFidIn(list);
         ProviderMapper.deleteByExample(example);
     }
+
+    @Override
+    public List<Provider> listAll() {
+        return ProviderMapper.selectByExample(null);
+    }
 }

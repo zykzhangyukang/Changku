@@ -41,16 +41,80 @@
 </div>
 <!--单行操作工具栏--->
 <div id="departmentRowBar" style="display: none;">
-    <button    type="button" lay-event="edit"  class="layui-btn   layui-btn-xs"><span class="layui-icon layui-icon-edit"></span>修改</button>
-    <button    type="button" lay-event="delete"  class="layui-btn layui-btn-xs layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>删除</button>
+    <button   type="button" lay-event="edit"  class="layui-btn   layui-btn-xs"><span class="layui-icon layui-icon-edit"></span>修改</button>
+    <button   type="button" lay-event="inChangku"  class="layui-btn   layui-btn-xs layui-btn-warm"><span class="layui-icon layui-icon-edit"></span>入库</button>
+    <button   type="button" lay-event="delete"  class="layui-btn layui-btn-xs layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>删除</button>
 </div>
 
+<!-- 入库 -->
+<div style="display: none;padding: 10px"  id="inChangkuModal">
+    <form action="" method="post" class="layui-form layui-form-pane" id="addProdForm"  lay-filter="addProdForm">
+        <div class="layui-form-item">
+            <label class="layui-form-label">商家名称</label>
+            <div class="layui-input-inline">
+                <input type="hidden" name="typeid">
+                <select id="providers" name="merchantname" lay-verify="required">
+                    <option value="">商家名称</option>
+                </select>
+            </div>
+            <label class="layui-form-label">商品品牌</label>
+            <div class="layui-input-inline">
+                <input type="text" lay-verify="required" name="productbrand" placeholder="商品品牌"  class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">商品规格</label>
+            <div class="layui-input-inline">
+                <input type="text" lay-verify="required" name="type" placeholder="商品规格"  class="layui-input">
+            </div>
+            <label class="layui-form-label">商品型号</label>
+            <div class="layui-input-inline">
+                <input type="text" lay-verify="required" name="productmodel" placeholder="商品品牌"  class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+        <label class="layui-form-label">单位</label>
+        <div class="layui-input-inline">
+            <select name="unit" id="unit" lay-verify="required">
+                <option value="">单位</option>
+            </select>
+        </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">商品数量</label>
+                <div class="layui-input-inline">
+                    <input type="text" lay-verify="" name="productcount" id="count" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">单价</label>
+                <div class="layui-input-inline" >
+                    <input type="text"  id="productsingleprice" lay-verify="number" name="productsingleprice" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">总价</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="total" name="productsprice" disabled autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button type="button" class="layui-btn" lay-submit="" lay-filter="doSubmit2" id="doSubmit2">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
 <!-- 添加和修改的弹出层开始 -->
 <div style="display: none;padding: 10px" id="addOrUpdateModal">
     <form action="" method="post" class="layui-form layui-form-pane" id="dataFrm" lay-filter="dataFrm">
         <div class="layui-form-item">
             <label class="layui-form-label">商品品牌</label>
             <div class="layui-input-inline">
+                <input type="hidden" name="producttype" id="producttype">
                 <input type="text" lay-verify="required" name="productbrand" placeholder="商品品牌" id="productbrand" class="layui-input">
             </div>
             <label class="layui-form-label" >商品类型</label>
@@ -69,13 +133,6 @@
             <label class="layui-form-label">规格</label>
             <div class="layui-input-inline">
                 <input type="text" name="type" lay-verify="required" placeholder="规格" autocomplete="off" class="layui-input">
-            </div>
-        </div>
-
-        <div class="layui-form-item layui-form-text">
-            <label class="layui-form-label">版本号</label>
-            <div class="layui-input-block">
-                <input name="version"  lay-verify="required" placeholder="版本号" class="layui-input" >
             </div>
         </div>
         <div class="layui-form-item layui-form-text">
@@ -97,14 +154,13 @@
 <script type="text/javascript" src="/resources/layui/layui.js"></script>
 <script type="text/javascript">
     var tableIns;
-    var selectTree;
+    var $;
    layui.use(['jquery','form','table','layer'],function () {
-        var $=layui.jquery;
+       $=layui.jquery;
         var layer=layui.layer;
         var form=layui.form;
         var table=layui.table;
         var index = layer.load(1);
-
         //加载数据
         tableIns=table.render({
             elem: '#departmentTable'
@@ -116,16 +172,46 @@
             ,cols: [ [
                 ,{field:'id', title:'id',hide:true,align:'center',sort:'true'}
                 ,{field:'productbrand', title:'商品品牌',align:'center',sort:'true'}
+                ,{field:'typeid',hide:true,align:'center',sort:'true'}
                 ,{field:'type', title:'规格',align:'center',sort:'true'}
                 ,{field:'productmodel', title:'商品型号',align:'center',sort:'true'}
                 ,{field:'remark', title:'备注',align:'center'}
-                ,{field:'version', title:'版本号',align:'center',sort:'true'}
-                ,{fixed: 'right', title:'操作', toolbar: '#departmentRowBar',align:'center',width:'180'}
+                ,{fixed: 'right', title:'操作', toolbar: '#departmentRowBar',align:'center',width:'300'}
             ] ]
             ,done:function () {//返回数据执行回调函数
                 layer.close(index);    //返回数据关闭loading
             }
         });
+       //加载单词
+       $.get("/unit/listUnits",{"time":new Date()},function (result) {
+           var list = result.data;    //返回的数据
+           var server = document.getElementById("unit");
+           for(var p in list){
+               var option = document.createElement("option");
+               option.setAttribute("value",list[p].title);
+               option.innerText=list[p].title;
+               server.appendChild(option);
+               form.render("select");
+           }
+       })
+       //计算总额
+       $("#productsingleprice").change(function () {
+           var price=parseFloat($(this).val());
+           var count=parseFloat($("#count").val());
+           $("#total").val((Number(price*count)).toFixed(2));
+       })
+       //加载商家下拉数据
+       $.get("/provider/listAll",{"time":new Date()},function (result) {
+           var list = result.data;    //返回的数据
+           var server = document.getElementById("providers");
+           for(var p in list){
+               var option = document.createElement("option");
+               option.setAttribute("value",list[p].merchantname);
+               option.innerText=list[p].merchantname;
+               server.appendChild(option);
+               form.render("select");
+           }
+       })
        $.ajax({
            url:"/product/listProductType",
            type:"GET",
@@ -163,7 +249,6 @@
                     break;
             };
         });
-
         //监听行工具条的事件
         table.on("tool(departmentTable)",function(obj){
             var data = obj.data; //获得当前行数据
@@ -171,11 +256,42 @@
                 case 'delete':
                     deletedepartment(data);
                     break;
+                case 'inChangku':
+                    inChangku(data);
+                    break;
                 case 'edit':
                     openUpdatedepartmentModal(data);
                     break;
             };
         });
+        //入库
+       var inchangDiv;
+       function inChangku(data) {
+           inchangDiv=layer.open({
+               type:1,
+               content: $("#inChangkuModal"),
+               area:['750px','400px'],
+               title:'入库',
+               success:function(){
+                   $("#dataFrm")[0].reset();
+                   console.log(data);
+                   form.val("addProdForm",data);
+                   url="/product/addProducts";
+               }
+           });
+       }
+       //点击添加
+       form.on("submit(doSubmit2)",function (data) {
+           alert(data.field)
+           $.post(url,data.field,function(res){
+               if(res.code==200){
+                   tableIns.reload();
+               }
+               layer.msg(res.msg);
+               layer.close(inchangDiv);
+           })
+           return false;
+       })
         var mainIndex;
         var url;
         //打开添加的弹出层

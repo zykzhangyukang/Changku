@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>供应商管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" href="/resources/layui/css/layui.css" media="all" />
+    <link rel="stylesheet" href="/resources/css/public.css" media="all" />
+</head>
+<body class="childrenBody">
+<!--查询条件开始-->
+<blockquote class="layui-elem-quote">
+    <form class="layui-form" action="" id="productsDataForm" method="post">
+        <span>商品类型:</span>&nbsp;
+        <div class="layui-inline">
+            <input class="layui-input" name="producttype" id="producttype" placeholder="商品类型" autocomplete="off">
+        </div>&nbsp;
+        <span>商品品牌:</span>
+        <div class="layui-inline">
+            <input class="layui-input" name="productbrand" id="productbrand" placeholder="商品品牌" autocomplete="off">
+        </div>&nbsp;
+
+        <button type="button" class="layui-btn layui-btn-normal"  lay-submit="" lay-filter="doSearch"><span class="layui-icon layui-icon-search"></span>搜索</button></legend>
+        <button type="reset" class="layui-btn layui-btn-warm" ><span class="layui-icon layui-icon-refresh"></span>重置</button></legend>
+    </form>
+</blockquote>
+<!--查询条件结束-->
+
+<!--数据表格开始-->
+<table class="layui-hide" id="productsDataTable" lay-filter="productsDataTable">
+</table>
+<!--数据表格结束-->
+
+
+<!--数据表格结束-->
+<script type="text/javascript" src="/resources/layui/layui.js"></script>
+<script type="text/javascript">
+
+    layui.use(['jquery','form','table','layer','laydate'],function () {
+        var $=layui.jquery;
+        var layer=layui.layer;
+        var form=layui.form;
+        var table=layui.table;
+        var laydate=layui.laydate;
+        laydate.render({
+            elem:'#birthday',
+            type:'datetime'
+        });
+        //加载数据
+        var tableIns =table.render({
+            elem: '#productsDataTable'
+            ,url:'/productsData/findPage'
+            ,title: '商品库存表'
+            ,height:'full-60'
+            ,page: true
+            ,cols: [ [
+                ,{field:'producttype', title:'商品',align:'center'  ,sort:'true'}
+                ,{field:'productbrand', title:'品牌',align:'center'}
+                ,{field:'productmodel', title:'型号',align:'center'  ,sort:'true'}
+                ,{field:'unit', title:'单位',align:'center'   }
+                ,{field:'productsingleprice', title:'单价',align:'center',sort:'true'  }
+                ,{field:'productsprice', title:'总价',align:'center'   }
+                ,{field:'allsum', title:'库存',align:'center'   }
+                ,{field:'manager', title:'经办人',align:'center',sort:'true'  }
+                ,{field:'addtime', title:'入库时间',align:'center',sort:'true' }
+            ] ]
+        });
+
+        //模糊查询
+        form.on("submit(doSearch)",function(data){
+            tableIns.reload({
+                where:data.field,
+                page:{
+                    curr:1
+                }
+            });
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

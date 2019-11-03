@@ -15,4 +15,5 @@ public interface ProductsService {
 
     Page<Products> listProducts(ProductsVo productCongVo, Integer page, Integer limit);
 
+    void saveOrUpdate(ProductsVo productsVo);
 }

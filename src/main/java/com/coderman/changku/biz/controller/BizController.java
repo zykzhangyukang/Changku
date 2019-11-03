@@ -11,14 +11,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/biz")
 public class BizController {
 
-
     /**
-     * 跳转到字典管理页面
+     * 跳转到字典详情管理页面
      * @return
      */
     @GetMapping("/toUnitManager")
     public String toUnitManager(){
-        return "biz/unit/unit";
+        return "biz//unit/unit";
+    }
+    /**
+     * 跳转到库存详情管理页面
+     * @return
+     */
+    @GetMapping("/toProductsDataManager")
+    public String toProductsDataManager(){
+        return "biz/product-in/productsdata";
     }
 
     /**

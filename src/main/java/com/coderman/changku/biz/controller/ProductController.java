@@ -17,10 +17,7 @@ import com.coderman.changku.sys.modal.User;
 import jdk.nashorn.internal.objects.annotations.Getter;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
@@ -43,21 +40,27 @@ public class ProductController {
     private ProductsService productsService;
 
     /*********************************入库库操作开始***************************************/
+
+
+
     /**
      * 入库商品
      * @return
      */
     @PostMapping("/addProducts")
-    public BizResultObject addProducts(ProductsVo productsVo){
+    public BizResultObject addProducts(ProductsVo productsVo,@RequestParam(name = "typeid",required = false) String typeid){
         productsVo.setFid(IDUtils.getGUID());
         User user = (User) WebUtil.getSession().getAttribute("user");
         productsVo.setManager(user.getName());
         try {
+            if(typeid!=null&&!"".equals(typeid)){
+                productsVo.setProducttype(typeid);
+            }
             productsVo.setProducttype(productTypeService.finTypeById(productsVo.getProducttype()));
             productsVo.setManager(user.getName());
             productsVo.setAddtime(new Date().toString());
             productsVo.setOperator(user.getName());
-            productsService.add(productsVo);
+            productsService.saveOrUpdate(productsVo);
             return BizResultObject.ADD_SUCCESS;
         } catch (Exception e) {
             e.printStackTrace();

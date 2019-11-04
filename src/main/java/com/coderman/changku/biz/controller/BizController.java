@@ -17,7 +17,7 @@ public class BizController {
      */
     @GetMapping("/toUnitManager")
     public String toUnitManager(){
-        return "biz//unit/unit";
+        return "biz/unit/unit";
     }
     /**
      * 跳转到库存详情管理页面

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>商品出库管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" href="/resources/layui/css/layui.css" media="all" />
+    <link rel="stylesheet" href="/resources/css/public.css" media="all" />
+</head>
+<body class="childrenBody">
+<!--查询条件开始-->
+<blockquote class="layui-elem-quote">
+    <form class="layui-form" action="" id="productsDataForm" method="post">
+        <span>商品类型:</span>&nbsp;
+        <div class="layui-inline">
+            <input class="layui-input" name="producttype" id="producttype" placeholder="商品类型" autocomplete="off">
+        </div>&nbsp;
+        <span>商品品牌:</span>
+        <div class="layui-inline">
+            <input class="layui-input" name="productbrand" id="productbrand" placeholder="商品品牌" autocomplete="off">
+        </div>&nbsp;
+
+        <button type="button" class="layui-btn layui-btn-normal"  lay-submit="" lay-filter="doSearch"><span class="layui-icon layui-icon-search"></span>搜索</button></legend>
+        <button type="reset" class="layui-btn layui-btn-warm" ><span class="layui-icon layui-icon-refresh"></span>重置</button></legend>
+    </form>
+</blockquote>
+<!--查询条件结束-->
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">选择出库的商品</button>
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
+        <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
+    </div>
+</script>
+<!--数据表格开始-->
+<table class="layui-hide" id="productsDataTable" lay-filter="productsDataTable">
+</table>
+<!--数据表格结束-->
+<!--出库模态框-->
+<div style="display: none;padding: 10px" id="productOutDIV">
+    <form action="" method="post" class="layui-form layui-form-pane" id="dataFrm" lay-filter="dataFrm">
+        <div class="layui-form-item">
+            <input type="hidden" name="items" id="items">
+            <label class="layui-form-label">客户名称</label>
+            <div class="layui-input-inline">
+                <input type="hidden" name="typeid">
+                <select id="customers" name="customername" lay-filter="customers"  lay-verify="required">
+                    <option value="">客户名称</option>
+                </select>
+            </div>
+            <label class="layui-form-label">车辆型号</label>
+            <div class="layui-input-inline">
+                <input type="text" name="cartype" id="cartype" disabled lay-verify="required" placeholder="请输入车型号" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">电话号码</label>
+            <div class="layui-input-inline">
+                <input type="text" lay-verify="required" disabled name="customertell" id="customertell" placeholder="请输入电话号码" autocomplete="off" class="layui-input">
+            </div>
+            <label class="layui-form-label">客户生日</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" name="birthday" disabled id="birthday" placeholder="客户生日" autocomplete="off">
+            </div>
+
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">客户地址</label>
+            <div class="layui-input-inline">
+                <input type="text" lay-verify="required" id="address" disabled name="address" placeholder="请输入客户地址" autocomplete="off" class="layui-input">
+            </div>
+            <label class="layui-form-label">税号</label>
+            <div class="layui-input-inline">
+                <input type="text" name="sh" placeholder="请输入税号" id="sh" disabled autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">开户行</label>
+            <div class="layui-input-inline">
+                <input type="text" lay-verify="required" name="bank" id="bank" disabled placeholder="请输入客户银行账号" autocomplete="off" class="layui-input">
+            </div>
+            <label class="layui-form-label">银行账号</label>
+            <div class="layui-input-inline">
+                <input type="text" name="bankno" lay-verify="required" id="bankno" disabled  placeholder="请输入银行账号" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">车辆品牌</label>
+            <div class="layui-input-inline">
+                <input type="text" name="carpinpai" id="carpinpai" disabled placeholder="请输入客户车辆品牌" autocomplete="off" class="layui-input">
+            </div>
+            <label class="layui-form-label">车牌号</label>
+            <div class="layui-input-inline">
+                <input type="text" name="carno" lay-verify="required" id="carno" disabled placeholder="请输入车牌号" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+        <label class="layui-form-label">车程数</label>
+        <div class="layui-input-inline">
+            <input type="text" name="cardistance" lay-verify="required" id="cardistance" placeholder="请输入车程数" autocomplete="off" class="layui-input">
+        </div>
+        </div>
+        <div class="layui-form-item" style="text-align: center;margin-top: 20px;">
+        <button type="button" class="layui-btn layui-btn-lg layui-btn-normal" id="doOut" lay-submit="" lay-filter="doOut">出库</button>
+        </div>
+    </form>
+</div>
+
+
+<!--数据表格结束-->
+<script type="text/javascript" src="/resources/layui/layui.js"></script>
+<script type="text/javascript">
+
+    layui.use(['jquery','form','table','layer','laydate'],function () {
+        var $=layui.jquery;
+        var layer=layui.layer;
+        var form=layui.form;
+        var table=layui.table;
+        var table2=layui.table;
+        var laydate=layui.laydate;
+        laydate.render({
+            elem:'#birthday',
+            type:'datetime'
+        });
+        //加载数据
+        var tableIns =table.render({
+            elem: '#productsDataTable'
+            ,url:'/productsData/findPage'
+            ,toolbar: '#toolbarDemo'
+            ,title: '商品库存表'
+            ,height:'full-60'
+            ,page: true
+            ,cols: [ [
+                {type:'numbers'}
+                ,{type: 'checkbox', }
+                ,{field:'outcount', title:'出库数',align:'center', edit: 'text' ,sort:'true'}
+                ,{field:'id', title:'fid',hide:true,align:'center', edit: 'text' ,sort:'true'}
+                ,{field:'producttype', title:'商品',align:'center'  ,sort:'true'}
+                ,{field:'productbrand', title:'品牌',align:'center'}
+                ,{field:'productmodel', title:'型号',align:'center'  ,sort:'true'}
+                ,{field:'type', title:'规格',align:'center'  ,sort:'true'}
+                ,{field:'unit', title:'单位',align:'center'   }
+                ,{field:'productsingleprice', title:'单价',align:'center',sort:'true'  }
+                ,{field:'productsprice', title:'总价',align:'center'   }
+                ,{field:'allsum', title:'库存',align:'center'   }
+                ,{field:'manager', title:'经办人',align:'center',sort:'true'  }
+                ,{field:'addtime', title:'入库时间',align:'center',sort:'true' }
+            ] ]
+        });
+
+        //工具栏事件
+        table.on('toolbar(productsDataTable)', function(obj){
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch(obj.event){
+                case 'getCheckData':
+                    var data = checkStatus.data;
+                    var dataLength=checkStatus.data.length;
+                    if(dataLength>0){
+                        productOut(data);
+                    }else {
+                        layer.msg("请选中出库的商品")
+                    }
+                    break;
+                case 'getCheckLength':
+                    var data = checkStatus.data;
+                    layer.msg('选中了：'+ data.length + ' 个');
+                    break;
+                case 'isAll':
+                    layer.msg(checkStatus.isAll ? '全选': '未全选')
+                    break;
+            };
+        });
+        var mainIndex;
+        //点击出库
+        form.on("submit(doOut)",function (data) {
+            console.log(data)
+            $.post("/product/out/doOut",data.field,function(res){
+                if(res.code==0){
+                    layer.msg("出库成功");
+                    layer.close(mainIndex);
+                    tableIns.reload({
+                        page:{
+                            curr:1
+                        }
+                    });
+                }
+            })
+            return false;
+        })
+        //商品出库
+
+        function productOut(data) {
+
+            //检验用户输入的库存数是否合法
+            if(data.length)
+            var flag=false;
+            $.each(data,function (index, item) {
+                //验证用户填入的库存是否为正整数
+                var reg=/^[0-9]+$/;
+                if(!(reg.test(item.outcount)&&reg.test(item.allsum))){
+                    layer.msg("品牌：【"+item.productbrand+"】，型号：【"+item.productmodel+"】的库存数需要为正整数 ")
+                    flag=true;
+                    return false;
+                }
+                var out=parseInt(item.outcount);
+                var total=parseInt(item.allsum);
+                if(isNaN(out)||out==""|| out==null||out>total){
+                    layer.msg("品牌：【"+item.productbrand+"】，型号：【"+item.productmodel+"】的库存数不正确 ")
+                    flag=true;
+                }
+                if(flag==true){
+                    return false;
+                }
+            })
+            if(flag){return false;}
+            mainIndex=layer.open({
+                type:1,
+                content:$("#productOutDIV"),
+                area:['700px','550px'],
+                title:'出库商品',
+                success:function(){
+                    $("#items").val(JSON.stringify(data));
+                    //加载所有的客户
+                    $.get("/customer/loadAllCustomer",{"time":new Date()},function (result) {
+                        var list = result.data;    //返回的数据
+                        var server = document.getElementById("customers");
+                        for(var p in list){
+                            var option = document.createElement("option");
+                            option.setAttribute("value",list[p].id);
+                            option.innerText=list[p].customername;
+                            server.appendChild(option);
+                            form.render("select");
+                        }
+                    })
+                }
+            });
+        }
+        //根据选中的客户，显示该客户的信息
+        form.on('select(customers)', function(data){
+            var customerId=data.value;
+            $.get("/customer/findOne",{"id":customerId},function (res) {
+                if(res.code==0){
+                    var customer=res.data;
+                    $("#customertell").val(customer.customertell);
+                    $("#address").val(customer.address);
+                    $("#bank").val(customer.bank);
+                    $("#bankno").val(customer.bankno);
+                    $("#birthday").val(customer.birthday);
+                    $("#sh").val(customer.sh);
+                    $("#carpinpai").val(customer.carpinpai);
+                    $("#carno").val(customer.carno);
+                    $("#cartype").val(customer.cartype);
+                }
+            })
+        });
+        //模糊查询
+        form.on("submit(doSearch)",function(data){
+            tableIns.reload({
+                where:data.field,
+                page:{
+                    curr:1
+                }
+            });
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

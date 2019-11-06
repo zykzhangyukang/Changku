@@ -29,6 +29,23 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
+
+    @GetMapping("/findOne")
+    public ResultJson findOne(String id){
+        Customer customer=customerService.findOne(id);
+        return new ResultJson(customer);
+    }
+
+    /**
+     * 加载所有的客户信息
+     * @return
+     */
+    @GetMapping("/loadAllCustomer")
+    public ResultJson loadAllCustomer(){
+        List<Customer> customers=customerService.loadAllCustomer();
+        return new ResultJson(customers);
+    }
+
     /**
      * 查询客户信息
      * @param customerVo

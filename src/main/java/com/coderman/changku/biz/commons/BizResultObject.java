@@ -35,6 +35,8 @@ public class BizResultObject {
 
     public static final BizResultObject NOT_HAVE_PERMISSION = new BizResultObject(Constast.ERROR,"对不起，您没有权限操作");
 
+    public static final BizResultObject STOCK_ERROR = new BizResultObject(Constast.ERROR,"库存错误");
+
 
     private Integer code;
     private String msg;

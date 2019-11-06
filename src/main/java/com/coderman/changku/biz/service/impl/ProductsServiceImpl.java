@@ -1,6 +1,9 @@
 package com.coderman.changku.biz.service.impl;
 
+import com.coderman.changku.biz.commons.BizResultObject;
 import com.coderman.changku.biz.commons.IDUtils;
+import com.coderman.changku.biz.dto.ProductDataDTO;
+import com.coderman.changku.biz.exception.BizException;
 import com.coderman.changku.biz.mapper.ProductsDataMapper;
 import com.coderman.changku.biz.mapper.ProductsMapper;
 import com.coderman.changku.biz.modal.Products;
@@ -94,6 +97,23 @@ public class ProductsServiceImpl implements ProductsService {
             productsDataMapper.insertSelective(p);
         }
 
+    }
+
+    @Override
+    public void deProductStock(List<ProductDataDTO> list) {
+        for (ProductDataDTO productsData : list) {
+            ProductsData data = productsDataMapper.selectByPrimaryKey(productsData.getId());
+            Integer result=data.getAllsum()-Integer.parseInt(productsData.getOutcount());
+            if(result<0){
+                throw new BizException(BizResultObject.STOCK_ERROR);
+            }
+            //总价(数据库)
+            BigDecimal productsprice = data.getProductsprice();
+            int count=Integer.parseInt(productsData.getOutcount());
+            data.setProductsprice(productsprice.subtract(data.getProductsingleprice().multiply(new BigDecimal(count))));
+            data.setAllsum(result);
+            productsDataMapper.updateByPrimaryKeySelective(data);
+        }
     }
 
     private ProductsExample createProductsExample(ProductsVo productsVo) {

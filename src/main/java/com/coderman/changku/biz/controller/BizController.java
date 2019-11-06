@@ -12,6 +12,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class BizController {
 
     /**
+     * 跳转到商品出库管理
+     * @return
+     */
+    @GetMapping("/toProductOutManager")
+    public String toProductOutManager(){
+        return "biz/product-out/productout";
+    }
+    /**
      * 跳转到字典详情管理页面
      * @return
      */

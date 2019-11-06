@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coderman.changku.biz.mapper.ProductsOutmainMapper">
+  <resultMap id="BaseResultMap" type="com.coderman.changku.biz.modal.ProductsOutmain">
+    <id column="fID" jdbcType="VARCHAR" property="fid" />
+    <result column="CustomerName" jdbcType="VARCHAR" property="customername" />
+    <result column="CustomerTell" jdbcType="VARCHAR" property="customertell" />
+    <result column="CarPinPai" jdbcType="VARCHAR" property="carpinpai" />
+    <result column="CarType" jdbcType="VARCHAR" property="cartype" />
+    <result column="CarNo" jdbcType="VARCHAR" property="carno" />
+    <result column="CarDistance" jdbcType="DOUBLE" property="cardistance" />
+    <result column="Money" jdbcType="INTEGER" property="money" />
+    <result column="allsum" jdbcType="DECIMAL" property="allsum" />
+    <result column="manager" jdbcType="VARCHAR" property="manager" />
+    <result column="operator" jdbcType="VARCHAR" property="operator" />
+    <result column="addtime" jdbcType="TIMESTAMP" property="addtime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="version" jdbcType="INTEGER" property="version" />
+    <result column="fcor" jdbcType="VARCHAR" property="fcor" />
+    <result column="myallsum" jdbcType="DECIMAL" property="myallsum" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    fID, CustomerName, CustomerTell, CarPinPai, CarType, CarNo, CarDistance, Money, allsum, 
+    manager, operator, addtime, remark, version, fcor, myallsum
+  </sql>
+  <select id="selectByExample" parameterType="com.coderman.changku.biz.modal.ProductsOutmainExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from oa_products_outmain
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from oa_products_outmain
+    where fID = #{fid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from oa_products_outmain
+    where fID = #{fid,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.coderman.changku.biz.modal.ProductsOutmainExample">
+    delete from oa_products_outmain
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.coderman.changku.biz.modal.ProductsOutmain">
+    insert into oa_products_outmain (fID, CustomerName, CustomerTell, 
+      CarPinPai, CarType, CarNo, 
+      CarDistance, Money, allsum, 
+      manager, operator, addtime, 
+      remark, version, fcor, 
+      myallsum)
+    values (#{fid,jdbcType=VARCHAR}, #{customername,jdbcType=VARCHAR}, #{customertell,jdbcType=VARCHAR}, 
+      #{carpinpai,jdbcType=VARCHAR}, #{cartype,jdbcType=VARCHAR}, #{carno,jdbcType=VARCHAR}, 
+      #{cardistance,jdbcType=DOUBLE}, #{money,jdbcType=INTEGER}, #{allsum,jdbcType=DECIMAL}, 
+      #{manager,jdbcType=VARCHAR}, #{operator,jdbcType=VARCHAR}, #{addtime,jdbcType=TIMESTAMP}, 
+      #{remark,jdbcType=VARCHAR}, #{version,jdbcType=INTEGER}, #{fcor,jdbcType=VARCHAR}, 
+      #{myallsum,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.coderman.changku.biz.modal.ProductsOutmain">
+    insert into oa_products_outmain
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="fid != null">
+        fID,
+      </if>
+      <if test="customername != null">
+        CustomerName,
+      </if>
+      <if test="customertell != null">
+        CustomerTell,
+      </if>
+      <if test="carpinpai != null">
+        CarPinPai,
+      </if>
+      <if test="cartype != null">
+        CarType,
+      </if>
+      <if test="carno != null">
+        CarNo,
+      </if>
+      <if test="cardistance != null">
+        CarDistance,
+      </if>
+      <if test="money != null">
+        Money,
+      </if>
+      <if test="allsum != null">
+        allsum,
+      </if>
+      <if test="manager != null">
+        manager,
+      </if>
+      <if test="operator != null">
+        operator,
+      </if>
+      <if test="addtime != null">
+        addtime,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="version != null">
+        version,
+      </if>
+      <if test="fcor != null">
+        fcor,
+      </if>
+      <if test="myallsum != null">
+        myallsum,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="fid != null">
+        #{fid,jdbcType=VARCHAR},
+      </if>
+      <if test="customername != null">
+        #{customername,jdbcType=VARCHAR},
+      </if>
+      <if test="customertell != null">
+        #{customertell,jdbcType=VARCHAR},
+      </if>
+      <if test="carpinpai != null">
+        #{carpinpai,jdbcType=VARCHAR},
+      </if>
+      <if test="cartype != null">
+        #{cartype,jdbcType=VARCHAR},
+      </if>
+      <if test="carno != null">
+        #{carno,jdbcType=VARCHAR},
+      </if>
+      <if test="cardistance != null">
+        #{cardistance,jdbcType=DOUBLE},
+      </if>
+      <if test="money != null">
+        #{money,jdbcType=INTEGER},
+      </if>
+      <if test="allsum != null">
+        #{allsum,jdbcType=DECIMAL},
+      </if>
+      <if test="manager != null">
+        #{manager,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null">
+        #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="addtime != null">
+        #{addtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null">
+        #{version,jdbcType=INTEGER},
+      </if>
+      <if test="fcor != null">
+        #{fcor,jdbcType=VARCHAR},
+      </if>
+      <if test="myallsum != null">
+        #{myallsum,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.coderman.changku.biz.modal.ProductsOutmainExample" resultType="java.lang.Integer">
+    select count(*) from oa_products_outmain
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update oa_products_outmain
+    <set>
+      <if test="record.fid != null">
+        fID = #{record.fid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.customername != null">
+        CustomerName = #{record.customername,jdbcType=VARCHAR},
+      </if>
+      <if test="record.customertell != null">
+        CustomerTell = #{record.customertell,jdbcType=VARCHAR},
+      </if>
+      <if test="record.carpinpai != null">
+        CarPinPai = #{record.carpinpai,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cartype != null">
+        CarType = #{record.cartype,jdbcType=VARCHAR},
+      </if>
+      <if test="record.carno != null">
+        CarNo = #{record.carno,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cardistance != null">
+        CarDistance = #{record.cardistance,jdbcType=DOUBLE},
+      </if>
+      <if test="record.money != null">
+        Money = #{record.money,jdbcType=INTEGER},
+      </if>
+      <if test="record.allsum != null">
+        allsum = #{record.allsum,jdbcType=DECIMAL},
+      </if>
+      <if test="record.manager != null">
+        manager = #{record.manager,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operator != null">
+        operator = #{record.operator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addtime != null">
+        addtime = #{record.addtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.version != null">
+        version = #{record.version,jdbcType=INTEGER},
+      </if>
+      <if test="record.fcor != null">
+        fcor = #{record.fcor,jdbcType=VARCHAR},
+      </if>
+      <if test="record.myallsum != null">
+        myallsum = #{record.myallsum,jdbcType=DECIMAL},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update oa_products_outmain
+    set fID = #{record.fid,jdbcType=VARCHAR},
+      CustomerName = #{record.customername,jdbcType=VARCHAR},
+      CustomerTell = #{record.customertell,jdbcType=VARCHAR},
+      CarPinPai = #{record.carpinpai,jdbcType=VARCHAR},
+      CarType = #{record.cartype,jdbcType=VARCHAR},
+      CarNo = #{record.carno,jdbcType=VARCHAR},
+      CarDistance = #{record.cardistance,jdbcType=DOUBLE},
+      Money = #{record.money,jdbcType=INTEGER},
+      allsum = #{record.allsum,jdbcType=DECIMAL},
+      manager = #{record.manager,jdbcType=VARCHAR},
+      operator = #{record.operator,jdbcType=VARCHAR},
+      addtime = #{record.addtime,jdbcType=TIMESTAMP},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      version = #{record.version,jdbcType=INTEGER},
+      fcor = #{record.fcor,jdbcType=VARCHAR},
+      myallsum = #{record.myallsum,jdbcType=DECIMAL}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.coderman.changku.biz.modal.ProductsOutmain">
+    update oa_products_outmain
+    <set>
+      <if test="customername != null">
+        CustomerName = #{customername,jdbcType=VARCHAR},
+      </if>
+      <if test="customertell != null">
+        CustomerTell = #{customertell,jdbcType=VARCHAR},
+      </if>
+      <if test="carpinpai != null">
+        CarPinPai = #{carpinpai,jdbcType=VARCHAR},
+      </if>
+      <if test="cartype != null">
+        CarType = #{cartype,jdbcType=VARCHAR},
+      </if>
+      <if test="carno != null">
+        CarNo = #{carno,jdbcType=VARCHAR},
+      </if>
+      <if test="cardistance != null">
+        CarDistance = #{cardistance,jdbcType=DOUBLE},
+      </if>
+      <if test="money != null">
+        Money = #{money,jdbcType=INTEGER},
+      </if>
+      <if test="allsum != null">
+        allsum = #{allsum,jdbcType=DECIMAL},
+      </if>
+      <if test="manager != null">
+        manager = #{manager,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null">
+        operator = #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="addtime != null">
+        addtime = #{addtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null">
+        version = #{version,jdbcType=INTEGER},
+      </if>
+      <if test="fcor != null">
+        fcor = #{fcor,jdbcType=VARCHAR},
+      </if>
+      <if test="myallsum != null">
+        myallsum = #{myallsum,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where fID = #{fid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.coderman.changku.biz.modal.ProductsOutmain">
+    update oa_products_outmain
+    set CustomerName = #{customername,jdbcType=VARCHAR},
+      CustomerTell = #{customertell,jdbcType=VARCHAR},
+      CarPinPai = #{carpinpai,jdbcType=VARCHAR},
+      CarType = #{cartype,jdbcType=VARCHAR},
+      CarNo = #{carno,jdbcType=VARCHAR},
+      CarDistance = #{cardistance,jdbcType=DOUBLE},
+      Money = #{money,jdbcType=INTEGER},
+      allsum = #{allsum,jdbcType=DECIMAL},
+      manager = #{manager,jdbcType=VARCHAR},
+      operator = #{operator,jdbcType=VARCHAR},
+      addtime = #{addtime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      version = #{version,jdbcType=INTEGER},
+      fcor = #{fcor,jdbcType=VARCHAR},
+      myallsum = #{myallsum,jdbcType=DECIMAL}
+    where fID = #{fid,jdbcType=VARCHAR}
+  </update>
+
+</mapper>

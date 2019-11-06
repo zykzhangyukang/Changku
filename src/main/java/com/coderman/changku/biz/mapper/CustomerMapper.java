@@ -4,6 +4,7 @@ import com.coderman.changku.biz.modal.Customer;
 import com.coderman.changku.biz.modal.CustomerExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 public interface CustomerMapper {
     int countByExample(CustomerExample example);
@@ -27,4 +28,7 @@ public interface CustomerMapper {
     int updateByPrimaryKeySelective(Customer record);
 
     int updateByPrimaryKey(Customer record);
+
+    @Select("select CustomerName from oa_customer_list where fid=#{customername}")
+    String findName(String customername);
 }

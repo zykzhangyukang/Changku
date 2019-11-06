@@ -41,6 +41,6 @@
 			<property name="enableSubPackages" value="true" />
 		</javaClientGenerator>
 		<!-- table指定每个表的生成策略 -->
-		<table tableName="oa_unit" domainObjectName="Unit"></table>
+		<table tableName="oa_products_outmain" domainObjectName="ProductsOutmain"></table>
 	</context>
 </generatorConfiguration>

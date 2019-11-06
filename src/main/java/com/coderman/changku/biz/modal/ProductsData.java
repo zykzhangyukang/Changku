@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
 
 public class ProductsData {
+
+
     @JsonProperty(value = "id")
     private String fid;
 
@@ -37,6 +39,18 @@ public class ProductsData {
     private Integer allsum;
 
     private Integer version;
+
+    private String outcount;
+
+
+
+    public String getOutcount() {
+        return outcount;
+    }
+
+    public void setOutcount(String outcount) {
+        this.outcount = outcount;
+    }
 
     public String getFid() {
         return fid;

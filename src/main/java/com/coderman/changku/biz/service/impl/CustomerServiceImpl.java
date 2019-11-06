@@ -82,4 +82,15 @@ public class CustomerServiceImpl implements CustomerService {
         example.createCriteria().andFidIn(list);
         customerMapper.deleteByExample(example);
     }
+
+    @Override
+    public List<Customer> loadAllCustomer() {
+        return customerMapper.selectByExample(null);
+    }
+
+    @Override
+    public Customer findOne(String id) {
+        Customer customer = customerMapper.selectByPrimaryKey(id);
+        return customer;
+    }
 }

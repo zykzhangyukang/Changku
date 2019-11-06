@@ -43,4 +43,13 @@ public interface CustomerService {
      * @param list
      */
     void batchDelete(List<String> list);
+
+    /**
+     * 加载所有的客户信息
+     * @return
+     */
+    List<Customer> loadAllCustomer();
+
+
+    Customer findOne(String id);
 }

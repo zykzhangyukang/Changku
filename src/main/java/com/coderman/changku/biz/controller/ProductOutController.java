@@ -89,7 +89,8 @@ public class ProductOutController {
                 productsOutCong.setFfid(productsOutmain.getFid());//外键
                 productsOutCong.setManager(productDataDTO.getManager());
                 productsOutCong.setOperator(productDataDTO.getManager());
-                productsOutCong.setProductallprice(new BigDecimal(productDataDTO.getAllsum()));
+                BigDecimal singlePrice = productDataDTO.getProductsingleprice();
+                productsOutCong.setProductallprice(singlePrice.multiply(new BigDecimal(Integer.parseInt(productDataDTO.getOutcount()))));
                 productsOutCongMapper.insertSelective(productsOutCong);
             }
         }

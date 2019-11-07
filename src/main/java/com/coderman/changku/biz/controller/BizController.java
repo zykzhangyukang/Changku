@@ -12,6 +12,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class BizController {
 
     /**
+     * 跳转到商品出库记录管理
+     * @return
+     */
+    @GetMapping("/toProductRecordManager")
+    public String toProductRecordManager(){
+        return "biz/product-out/record";
+    }
+    /**
      * 跳转到商品出库管理
      * @return
      */

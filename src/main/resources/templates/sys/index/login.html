@@ -26,11 +26,11 @@
 		<div class="login_face"><img src="/resources/images/face.jpg" class="userAvatar"></div>
 		<div class="layui-form-item input-item">
 			<label for="userName">用户名</label>
-			<input type="text" value="system"   placeholder="请输入用户名" autocomplete="off" name="username" class="layui-input" lay-verify="required">
+			<input type="text"   placeholder="请输入用户名" autocomplete="off" name="username" class="layui-input" lay-verify="required">
 		</div>
 		<div class="layui-form-item input-item">
 			<label for="password">密码</label>
-			<input type="password" value="zhangyukang"   placeholder="请输入密码" autocomplete="off" name="password" class="layui-input" lay-verify="required">
+			<input type="password"    placeholder="请输入密码" autocomplete="off" name="password" class="layui-input" lay-verify="required">
 		</div>
 		<div class="layui-form-item input-item" id="imgCode">
 			<label for="code">验证码</label>
@@ -65,15 +65,15 @@
             form.on("submit(login)",function(data){
                 var btn =  $(this);
                 var num = show_num.join("");
-				// if($("#code").val()==null||$("#code").val()==""){
-                 //    //验证码校验
-                 //    layer.msg("请输入验证码");
-                 //    return false;
-                // }
-                // if($("#code").val().toLowerCase()!=num){
-                 //    layer.msg("验证码不正确");
-				//     return false;
-				// }
+				if($("#code").val()==null||$("#code").val()==""){
+                    //验证码校验
+                    layer.msg("请输入验证码");
+                    return false;
+                }
+                if($("#code").val().toLowerCase()!=num){
+                    layer.msg("验证码不正确");
+				    return false;
+				}
                 $(this).text("登录中...").attr("disabled","disabled").addClass("layui-disabled");
                 $.post("/login/login",data.field,function(rs){
                     //设置登录按钮 恢复可点击   在前端防止 重复点击

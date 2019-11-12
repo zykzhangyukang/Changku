@@ -1,9 +1,6 @@
 package com.coderman.changku.sys.controller;
 
-import com.coderman.changku.sys.commons.ActiveUser;
-import com.coderman.changku.sys.commons.AddressUtils;
-import com.coderman.changku.sys.commons.Constast;
-import com.coderman.changku.sys.commons.WebUtil;
+import com.coderman.changku.sys.commons.*;
 import com.coderman.changku.sys.entities.ResultObj;
 import com.coderman.changku.sys.modal.LoginInfo;
 import com.coderman.changku.sys.service.LoginInfoService;
@@ -44,12 +41,12 @@ public class LoginController {
             //记录登入日志
             LoginInfo loginInfo = new LoginInfo();
             loginInfo.setLoginname(activeUser.getUser().getName()+"-"+activeUser.getUser().getLoginname());
-            loginInfo.setLoginip(WebUtil.getRequest().getRemoteAddr());
+            loginInfo.setLoginip(IPUtil.getIpAddr(WebUtil.getRequest()));
             loginInfo.setLogintime(new Date(System.currentTimeMillis()));
             //根据Ip获取用户的登入地点。
             try {
                 loginInfo.setAddress(
-                    AddressUtils.getAddress("ip="+WebUtil.getRequest().getRemoteAddr().toString(), "utf-8")
+                        AddressUtil.getCityInfo(IPUtil.getIpAddr(WebUtil.getRequest()))
                 );
             } catch (Exception e) {
                 loginInfo.setAddress(Constast.IP_ADDRESS);

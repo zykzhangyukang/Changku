@@ -4,6 +4,7 @@ import com.coderman.changku.sys.commons.*;
 import com.coderman.changku.sys.entities.ResultObj;
 import com.coderman.changku.sys.modal.LoginInfo;
 import com.coderman.changku.sys.service.LoginInfoService;
+import org.apache.commons.lang3.SystemUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -41,14 +42,15 @@ public class LoginController {
             //记录登入日志
             LoginInfo loginInfo = new LoginInfo();
             loginInfo.setLoginname(activeUser.getUser().getName()+"-"+activeUser.getUser().getLoginname());
-            loginInfo.setLoginip(IPUtil.getIpAddr(WebUtil.getRequest()));
+            loginInfo.setLoginip(WebUtil.getRequest().getRemoteAddr());
             loginInfo.setLogintime(new Date(System.currentTimeMillis()));
             //根据Ip获取用户的登入地点。
             try {
                 loginInfo.setAddress(
-                        AddressUtil.getCityInfo(IPUtil.getIpAddr(WebUtil.getRequest()))
+                        AddressUtil.getCityInfo(loginInfo.getLoginip())
                 );
             } catch (Exception e) {
+
                 loginInfo.setAddress(Constast.IP_ADDRESS);
             }
             loginRecord(loginInfo);

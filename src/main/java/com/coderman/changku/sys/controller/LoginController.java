@@ -47,7 +47,8 @@ public class LoginController {
             //根据Ip获取用户的登入地点。
             try {
                 loginInfo.setAddress(
-                        AddressUtil.getCityInfo(loginInfo.getLoginip())
+                        AddressUtils.getAddress("ip="+loginInfo.getLoginip(), "utf-8")
+                        +SystemUtils.getHostName()+"【"+BrowserUtil.getRequestBrowserInfo(WebUtil.getRequest())+"】"
                 );
             } catch (Exception e) {
 

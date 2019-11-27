@@ -1,5 +1,7 @@
 package com.coderman.changku.biz.modal;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -26,6 +28,7 @@ public class ProductsOutmain {
 
     private String operator;
 
+    @JsonFormat(pattern = "yyyy年MM月dd日")
     private Date addtime;
 
     private String remark;

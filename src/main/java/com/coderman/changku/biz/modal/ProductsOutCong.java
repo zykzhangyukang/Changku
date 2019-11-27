@@ -1,5 +1,7 @@
 package com.coderman.changku.biz.modal;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.math.BigDecimal;
 
 public class ProductsOutCong {
@@ -30,6 +32,7 @@ public class ProductsOutCong {
 
     private BigDecimal productsprice;
 
+    @JsonFormat(pattern = "yyyy年MM月dd日")
     private String addtime;
 
     private String manager;
